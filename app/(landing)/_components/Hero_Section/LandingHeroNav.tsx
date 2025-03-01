@@ -1,3 +1,4 @@
+"use clinet";
 import React from "react";
 
 const LandingHeroNav = () => {
