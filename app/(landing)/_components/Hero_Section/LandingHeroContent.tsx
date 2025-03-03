@@ -1,5 +1,4 @@
 import React from "react";
-import { Logo } from "../../../_assets/images/image.png";
 import Image from "next/image";
 
 const LandingHeroContent = () => {
