@@ -1,7 +1,7 @@
-"use clinet";
+"use client";
 import React from "react";
 import { NavLinks } from "../../_landing_data/navLinks";
-import { Button } from "@/components/ui/button";
+import Button from "@mui/material/Button";
 
 const LandingHeroNav = () => {
   return (
@@ -12,7 +12,11 @@ const LandingHeroNav = () => {
       </div>
       <div className="landing-hero-nav-links">
         {NavLinks.map((link) => (
-          <Button key={link.name} className="landing-hero-nav-links-item">
+          <Button
+            variant="text"
+            key={link.name}
+            className="landing-hero-nav-links-item"
+          >
             {link.name}
           </Button>
         ))}

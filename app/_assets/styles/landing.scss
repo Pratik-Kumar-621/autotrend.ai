@@ -1,0 +1,105 @@
+.landing {
+  &-hero {
+    background: #141414;
+    &-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 40px 0 0 0;
+      &-logo {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #ffffff;
+        img {
+          height: 24px;
+        }
+      }
+      &-links {
+        &-item {
+          color: #ffffff;
+          font-size: 16px;
+          font-weight: 500;
+          text-transform: none;
+          height: 40px;
+          border-radius: 7px;
+          padding: 0 20px;
+        }
+      }
+    }
+    &-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 500px;
+      gap: 40px;
+      margin: 0 auto;
+      max-width: 1050px;
+      &-info {
+        width: 50%;
+        &-title {
+          font-size: 44px;
+          font-weight: 800;
+          margin-bottom: 10px;
+          line-height: 55px;
+        }
+        &-text {
+          font-size: 18px;
+          font-weight: 400;
+          margin-bottom: 40px;
+          line-height: 30px;
+          color: #ecd7ff;
+        }
+        &-buttons {
+          display: flex;
+          &-item {
+            &-primary {
+              margin-right: 30px;
+              background-color: #7b6dd3;
+              width: 140px;
+            }
+            &-secondary {
+              border-color: #f2f2f2;
+              color: #f2f2f2;
+              &:disabled {
+                color: #3f3f3f !important;
+                border-color: #3f3f3f;
+                cursor: not-allowed !important;
+              }
+            }
+            &-primary,
+            &-secondary {
+              font-size: 16px;
+              color: #fff !important;
+              font-weight: 600;
+              text-transform: capitalize !important;
+              width: 150px;
+              height: 44px;
+              border-radius: 7px;
+            }
+          }
+        }
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      &-image {
+        width: 50%;
+        border: 1px solid #818181;
+        border-radius: 11px;
+        background: #000000;
+        padding: 20px 40px;
+        max-width: 500px;
+        &-img {
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+  }
+}
