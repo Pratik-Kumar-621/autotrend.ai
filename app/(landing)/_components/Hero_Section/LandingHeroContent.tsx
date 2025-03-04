@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import { Tooltip } from "@mui/material";
+import Image from "next/image";
 
 const LandingHeroContent = () => {
   return (
@@ -34,7 +35,12 @@ const LandingHeroContent = () => {
         </div>
       </div>
       <div className="landing-hero-content-image">
-        <img src="/images/hero_image.png" alt="Hero Image" />
+        <Image
+          src="/images/hero_image.png"
+          alt="Hero Image"
+          height={322}
+          width={474}
+        />
       </div>
     </div>
   );

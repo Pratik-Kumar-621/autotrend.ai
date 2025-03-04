@@ -2,12 +2,13 @@
 import React from "react";
 import { NavLinks } from "../../_landing_data/navLinks";
 import Button from "@mui/material/Button";
+import Image from "next/image";
 
 const LandingHeroNav = () => {
   return (
     <div className="landing-hero-nav">
       <div className="landing-hero-nav-logo">
-        <img src="/images/Logo/Logo.png" alt="Logo" />
+        <Image src="/images/Logo/Logo.png" alt="Logo" width={31} height={20} />
         Autotrend.ai
       </div>
       <div className="landing-hero-nav-links">

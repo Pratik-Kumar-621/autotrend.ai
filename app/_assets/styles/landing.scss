@@ -17,7 +17,7 @@
         font-weight: 700;
         color: #ffffff;
         img {
-          height: 24px;
+          height: 24px !important;
         }
       }
       &-links {
@@ -95,9 +95,9 @@
         background: #000000;
         padding: 20px 40px;
         max-width: 500px;
-        &-img {
-          width: 100%;
-          height: auto;
+        img {
+          width: 100% !important;
+          height: auto !important;
         }
       }
     }
