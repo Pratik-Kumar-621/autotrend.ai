@@ -2,4 +2,4 @@
 
 ### Generate trending posts in one click
 
-<strong>Preview:</strong> 
+<strong>Preview:</strong> https://autotrendai.vercel.app/

@@ -1,5 +1,5 @@
+import { Button } from "@/components/ui/button";
 import React from "react";
-import Image from "next/image";
 
 const LandingHeroContent = () => {
   return (
@@ -13,39 +13,16 @@ const LandingHeroContent = () => {
           handles
         </div>
         <div className="landing-hero-content-info-buttons">
-          <button className="landing-hero-content-info-buttons-item">
-            Get Started
-          </button>
-          <button className="landing-hero-content-info-buttons-item">
+          <Button className="landing-hero-content-info-buttons-item">
+            Try it
+          </Button>
+          <Button className="landing-hero-content-info-buttons-item">
             Watch Demo
-          </button>
+          </Button>
         </div>
       </div>
       <div className="landing-hero-content-image">
-        <div className="landing-hero-content-image-item">
-          <Image
-            src="/images/image.png"
-            alt="twitter-img"
-            width={300}
-            height={200}
-          />
-        </div>{" "}
-        <div className="landing-hero-content-image-item">
-          <Image
-            src="/images/image.png"
-            alt="instagram-img"
-            width={300}
-            height={200}
-          />{" "}
-        </div>{" "}
-        <div className="landing-hero-content-image-item">
-          <Image
-            src="/images/image.png"
-            alt="facebook-img"
-            width={300}
-            height={200}
-          />{" "}
-        </div>
+        <img src="/images/hero_image.png" alt="Hero Image" />
       </div>
     </div>
   );
