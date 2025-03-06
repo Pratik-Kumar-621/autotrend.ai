@@ -16,6 +16,7 @@ const LandingHeroNav = () => {
           <Button
             variant="text"
             key={link.name}
+            href={link.link}
             className="landing-hero-nav-links-item"
           >
             {link.name}

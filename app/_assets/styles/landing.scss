@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 .landing {
   &-hero {
     background: #141414;
@@ -36,10 +40,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 500px;
+      min-height: 50vh;
       gap: 40px;
-      margin: 0 auto;
+      margin: 0 auto 100px;
       max-width: 1050px;
+
       &-info {
         width: 50%;
         &-title {
@@ -89,6 +94,7 @@
         justify-content: center;
       }
       &-image {
+        scale: 0.8;
         width: 50%;
         border: 1px solid #818181;
         border-radius: 11px;
@@ -101,5 +107,14 @@
         }
       }
     }
+  }
+  &-section {
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #141414;
+    color: white;
+    border: 1px solid white;
   }
 }
