@@ -40,7 +40,7 @@ const LandingContact = () => {
 
   return (
     <div
-      className="landing-content landing-contact text-[#c2c2c2]"
+      className="landing-content landing-contact text-white"
       id="landing-contact"
     >
       <h2 className="text-3xl font-bold text-center mb-4">Send us a Message</h2>
@@ -101,7 +101,8 @@ const LandingContact = () => {
           <div className="flex items-center justify-between">
             <Button
               type="submit"
-              className="bg-blue-500 capitalize text-[16px] mt-4 rounded-lg hover:bg-blue-600 text-white disabled:text-[#c2c2c2] font-bold py-2 px-4 w-full rounded focus:outline-none focus:shadow-outline disabled:bg-blue-400  transition ease-linear duration-200"
+              variant="contained"
+              className="landing-contact-button"
               disabled={state.submitting}
             >
               {state.submitting ? "Submitting..." : "Send Message"}

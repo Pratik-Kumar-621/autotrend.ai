@@ -116,9 +116,27 @@ html {
   }
   &-contact {
     display: block;
-    // background-color: #5c5c5c;
     max-width: 800px;
     margin: 0 auto;
     padding: 40px 60px;
+    &-button {
+      background-color: rgb(59 130 246) !important;
+      text-transform: capitalize !important;
+      font-size: 16px !important;
+      margin-top: 1rem;
+      border-radius: 5px !important;
+      color: white !important;
+      transition: all 0.2s linear !important;
+      width: 100%;
+      padding: 12px !important;
+      font-weight: bold !important;
+      &:hover {
+        background-color: rgb(37 99 235) !important;
+      }
+      &:disabled {
+        background-color: #60a5fa !important;
+        color: #c2c2c2 !important;
+      }
+    }
   }
 }
