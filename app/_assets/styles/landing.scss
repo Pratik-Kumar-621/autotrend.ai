@@ -3,6 +3,8 @@ html {
 }
 
 .landing {
+  background-color: #0c0b0b;
+
   &-hero {
     background: #141414;
     &-nav {
@@ -109,12 +111,14 @@ html {
     }
   }
   &-section {
-    height: 60vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #141414;
+    min-height: 60vh;
     color: white;
-    border: 1px solid white;
+  }
+  &-contact {
+    display: block;
+    // background-color: #5c5c5c;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 60px;
   }
 }
