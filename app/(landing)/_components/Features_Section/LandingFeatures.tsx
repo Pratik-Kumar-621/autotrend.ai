@@ -16,19 +16,24 @@ const LandingFeatures = () => {
   useEffect(() => {
     fetch("/api/features")
       .then((res) => res.json())
-      .then((feature) => setFeatures(feature));
+      .then((feature) => setFeatures(feature))
+      .catch((error) => console.log(error.message));
   }, []);
   console.log(features);
 
   return (
     <div className="landing-section" id="landing-features">
-      {features?.map((item: Feature) => {
-        return (
-          <div className="feature-list-item" key={item.id}>
-            {item.title}
-          </div>
-        );
-      })}
+      {features ? (
+        features.map((item: Feature) => {
+          return (
+            <div className="feature-list-item" key={item.id}>
+              {item.title}
+            </div>
+          );
+        })
+      ) : (
+        <>Error</>
+      )}
     </div>
   );
 };
