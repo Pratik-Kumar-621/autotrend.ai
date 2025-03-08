@@ -1,4 +1,5 @@
-import Image from "next/image";
+/* eslint-disable */
+
 import React, { useEffect, useState } from "react";
 
 type Feature = {
@@ -25,7 +26,6 @@ const LandingFeatures = () => {
         return (
           <div className="feature-list-item" key={item.id}>
             {item.title}
-            <img src={`data:image/png;base64,${item.image}`} alt="" />{" "}
           </div>
         );
       })}
