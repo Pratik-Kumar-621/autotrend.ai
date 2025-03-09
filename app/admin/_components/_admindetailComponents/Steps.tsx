@@ -78,7 +78,7 @@ const Steps: React.FC<StepsProps> = ({
             setForm({ step: "" });
             setIsModalOpen(true);
           }}
-          className="px-4 py-2 capitalize text-[16px] rounded-md"
+          className="!px-4 !capitalize !text-[16px] !rounded-md"
         >
           Add Step
         </Button>
@@ -123,7 +123,7 @@ const Steps: React.FC<StepsProps> = ({
                 setEditingStep(null);
                 setForm({ step: "" });
               }}
-              className="px-4 py-2 border capitalize text-[16px] rounded-md w-[100px]"
+              className="!px-4 !capitalize !text-[16px] !rounded-md !w-[100px]"
             >
               Cancel
             </Button>
@@ -133,7 +133,7 @@ const Steps: React.FC<StepsProps> = ({
               color="success"
               type="submit"
               disabled={loadingForm}
-              className="px-4 py-2 capitalize text-[16px] rounded-md w-[100px]"
+              className="!px-4 !capitalize !text-[16px] !rounded-md !w-[100px]"
             >
               {editingStep ? (
                 <>{loadingForm ? "Updating..." : "Update"}</>

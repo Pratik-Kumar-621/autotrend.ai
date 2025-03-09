@@ -52,7 +52,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, error }) => {
               </button>
             </div>
           </div>
-          <Button type="submit" variant="contained" className="w-full">
+          <Button
+            type="submit"
+            variant="contained"
+            className="w-full !capitalize !text-[16px] !rounded-md !py-2"
+          >
             Login
           </Button>
         </form>

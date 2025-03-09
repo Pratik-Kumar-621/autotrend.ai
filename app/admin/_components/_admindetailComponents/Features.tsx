@@ -135,7 +135,7 @@ const Features: React.FC<FeaturesProps> = ({
             setForm({ title: "", description: "", image: null });
             setIsModalOpen(true);
           }}
-          className="px-4 py-2 capitalize text-[16px] rounded-md"
+          className="!px-4 !capitalize !text-[16px] !rounded-md "
         >
           Add Feature
         </Button>
@@ -202,7 +202,7 @@ const Features: React.FC<FeaturesProps> = ({
                   variant="outlined"
                   color="error"
                   onClick={handleRemoveImage}
-                  className="capitalize text-[16px] rounded-md px-7"
+                  className="!px-7 !capitalize !text-[16px] !rounded-md "
                 >
                   Remove
                 </Button>
@@ -230,7 +230,7 @@ const Features: React.FC<FeaturesProps> = ({
                 setEditingFeature(null);
                 setForm({ title: "", description: "", image: null });
               }}
-              className="px-4 py-2 border capitalize text-[16px] rounded-md w-[100px]"
+              className="!px-4 !capitalize !text-[16px] !rounded-md !w-[100px]"
             >
               Cancel
             </Button>
@@ -240,7 +240,7 @@ const Features: React.FC<FeaturesProps> = ({
               color="success"
               type="submit"
               disabled={loadingForm}
-              className="px-4 py-2 capitalize text-[16px] rounded-md w-[100px]"
+              className="!px-4 !capitalize !text-[16px] !rounded-md !w-[100px]"
             >
               {editingFeature ? (
                 <>{loadingForm ? "Updating..." : "Update"} </>

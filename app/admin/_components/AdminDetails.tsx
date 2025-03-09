@@ -158,7 +158,7 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
           onClick={onLogout}
           variant="contained"
           color="error"
-          className="capitalize px-5 rounded-md text-[16px]"
+          className="!capitalize !px-5 !rounded-md !text-[16px]"
         >
           Log Out
         </Button>
