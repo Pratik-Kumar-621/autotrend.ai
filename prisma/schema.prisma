@@ -11,7 +11,7 @@ model Feature {
     id          String   @id @default(uuid()) @db.Uuid
     title       String
     description String
-    image       Bytes?
+    image       String?
     createdAt   DateTime @default(now())
 }
 

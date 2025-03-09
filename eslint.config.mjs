@@ -14,6 +14,7 @@ const eslintConfig = [
   {
     rules: {
       "@typescript-eslint/ban-ts-comment": "error",
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
 ];

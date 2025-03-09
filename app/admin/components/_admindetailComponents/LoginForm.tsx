@@ -1,10 +1,6 @@
 "use client";
 import React, { useState } from "react";
-
-interface LoginFormProps {
-  onLogin: (username: string, password: string) => void;
-  error: string;
-}
+import { LoginFormProps } from "./detailTypes";
 
 const LoginForm: React.FC<LoginFormProps> = ({ onLogin, error }) => {
   const [showPassword, setShowPassword] = useState(false);

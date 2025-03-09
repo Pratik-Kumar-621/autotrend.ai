@@ -6,11 +6,6 @@ const prisma = new PrismaClient();
 export const GET = async () => {
   try {
     const features = await prisma.feature.findMany();
-    features.forEach((feature) => {
-      if (feature.image) {
-        feature.image = Buffer.from(feature.image, "base64").toString("binary");
-      }
-    });
     return new Response(JSON.stringify(features), {
       status: 200,
       headers: { "Content-Type": "application/json" },
@@ -26,9 +21,6 @@ export const GET = async () => {
 export const POST = async (request: Request) => {
   try {
     const data = await request.json();
-    if (data.image) {
-      data.image = Buffer.from(data.image, "binary").toString("base64");
-    }
     const newFeature = await prisma.feature.create({
       data: data,
     });
@@ -48,9 +40,6 @@ export const PUT = async (request: Request) => {
   try {
     const data = await request.json();
     const { id, title, description, image } = data;
-    if (data.image) {
-      data.image = Buffer.from(data.image, "binary").toString("base64");
-    }
     const updatedFeature = await prisma.feature.update({
       where: { id: id },
       data: { title, description, image },

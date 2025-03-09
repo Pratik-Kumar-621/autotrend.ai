@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import LoginForm from "./components/LoginForm";
+import LoginForm from "./components/_admindetailComponents/LoginForm";
 import AdminDetails from "./components/AdminDetails";
 
 const AdminPage = () => {
