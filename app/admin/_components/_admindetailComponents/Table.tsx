@@ -1,4 +1,4 @@
-import { TableProps } from "@mui/material";
+import { TableProps } from "../../adminTypes";
 import React from "react";
 
 const Table = <T extends Record<string, any>>({
@@ -19,19 +19,31 @@ const Table = <T extends Record<string, any>>({
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="bg-gray-50">
+          <tr className="bg-[#716f6f]">
+            <th className="px-4 py-2 text-center">#</th>
             {columns.map((column, index) => (
-              <th key={index} className="px-4 py-2 text-left">
+              <th
+                key={index}
+                className={`px-4 py-2 max-w-[400px] ${
+                  column.header === "Actions" ? "text-center" : "text-left"
+                }`}
+              >
                 {column.header}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {data.map((item, rowIndex) => (
+          {data?.map((item, rowIndex) => (
             <tr key={rowIndex} className="border-t">
+              <td className="px-4 py-2 text-center">{rowIndex + 1}</td>
               {columns.map((column, colIndex) => (
-                <td key={`${rowIndex}-${colIndex}`} className="px-4 py-2">
+                <td
+                  key={`${rowIndex}-${colIndex}`}
+                  className={`px-4 py-2 max-w-[400px] ${
+                    column.header === "Actions" ? "text-center" : "text-left"
+                  }`}
+                >
                   {column.render
                     ? column.render(item[column.accessor], item)
                     : item[column.accessor]}

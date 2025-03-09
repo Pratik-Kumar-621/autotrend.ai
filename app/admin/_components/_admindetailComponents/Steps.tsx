@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import Table from "./Table";
 import Modal from "./Modal";
-import { Step, StepForm, StepsProps } from "./detailTypes";
+import { Step, StepForm, StepsProps } from "../../adminTypes";
+import { Button, IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const Steps: React.FC<StepsProps> = ({
   steps,
@@ -9,6 +12,7 @@ const Steps: React.FC<StepsProps> = ({
   onAdd,
   onEdit,
   onDelete,
+  loadingForm,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingStep, setEditingStep] = useState<Step | null>(null);
@@ -50,37 +54,34 @@ const Steps: React.FC<StepsProps> = ({
       accessor: "id",
       render: (_: unknown, item: Step) => (
         <>
-          <button
-            onClick={() => handleEdit(item)}
-            className="text-blue-500 hover:text-blue-700 mr-2"
-          >
-            Edit
-          </button>
-          <button
-            onClick={() => handleDelete(item.id)}
-            className="text-red-500 hover:text-red-700"
-          >
-            Delete
-          </button>
+          <IconButton onClick={() => handleEdit(item)} color="primary">
+            <EditIcon className="text-[20px]" />
+          </IconButton>
+          &nbsp;
+          <IconButton onClick={() => handleDelete(item.id)} color="error">
+            <DeleteIcon className="text-[20px]" />
+          </IconButton>
         </>
       ),
     },
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <div className="flex justify-between items-center mb-4">
+    <div className="border border-[#555555] rounded-lg shadow p-6 mb-10">
+      <div className="flex justify-between items-center mb-7">
         <h2 className="text-xl font-semibold">Steps</h2>
-        <button
+        <Button
+          variant="contained"
+          color="success"
           onClick={() => {
             setEditingStep(null);
             setForm({ step: "" });
             setIsModalOpen(true);
           }}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          className="px-4 py-2 capitalize text-[16px] rounded-md"
         >
           Add Step
-        </button>
+        </Button>
       </div>
 
       <Table
@@ -100,8 +101,8 @@ const Steps: React.FC<StepsProps> = ({
         title={editingStep ? "Edit Step" : "Add Step"}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
+          <div className="mb-5">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Step
             </label>
             <textarea
@@ -113,23 +114,33 @@ const Steps: React.FC<StepsProps> = ({
             />
           </div>
           <div className="flex justify-end space-x-2">
-            <button
+            <Button
+              variant="outlined"
+              color="inherit"
               type="button"
               onClick={() => {
                 setIsModalOpen(false);
                 setEditingStep(null);
                 setForm({ step: "" });
               }}
-              className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
+              className="px-4 py-2 border capitalize text-[16px] rounded-md w-[100px]"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            &nbsp; &nbsp;
+            <Button
+              variant="contained"
+              color="success"
               type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              disabled={loadingForm}
+              className="px-4 py-2 capitalize text-[16px] rounded-md w-[100px]"
             >
-              {editingStep ? "Update" : "Add"}
-            </button>
+              {editingStep ? (
+                <>{loadingForm ? "Updating..." : "Update"}</>
+              ) : (
+                <>{loadingForm ? "Adding..." : "Add"}</>
+              )}
+            </Button>
           </div>
         </form>
       </Modal>

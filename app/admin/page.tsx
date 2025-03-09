@@ -1,12 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import LoginForm from "./components/_admindetailComponents/LoginForm";
-import AdminDetails from "./components/AdminDetails";
+import LoginForm from "./_components/LoginForm";
+import AdminDetails from "./_components/AdminDetails";
 
 const AdminPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [error, setError] = useState("");
 
+  // check if user is logged in or not
   useEffect(() => {
     const loginData = localStorage.getItem("adminLogin");
     if (loginData) {
@@ -19,6 +20,7 @@ const AdminPage = () => {
     }
   }, []);
 
+  // login user and save the user instance in localstorage
   const handleLogin = (username: string, password: string) => {
     const adminUsername = process.env.NEXT_PUBLIC_ADMIN_USER_NAME;
     const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;

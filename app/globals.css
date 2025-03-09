@@ -114,7 +114,8 @@
   }
 }
 
-html {
+html,
+body {
   background-color: #0c0b0b;
   scroll-behavior: smooth;
 }

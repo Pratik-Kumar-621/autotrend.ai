@@ -1,18 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Feature, Step } from "./_admindetailComponents/detailTypes";
 import Features from "./_admindetailComponents/Features";
 import Steps from "./_admindetailComponents/Steps";
-import {
-  AdminDetailsProps,
-  FeatureInput,
-} from "./_admindetailComponents/detailTypes";
+import { AdminDetailsProps, FeatureInput, Feature, Step } from "../adminTypes";
+import { Button } from "@mui/material";
 
 const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
   const [features, setFeatures] = useState<Feature[]>([]);
   const [steps, setSteps] = useState<Step[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingForm, setLoadingForm] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -39,6 +37,7 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
 
   // Feature handlers
   const handleAddFeature = async (feature: FeatureInput) => {
+    setLoadingForm(true);
     try {
       // Extract base64 data from the data URL
       console.log("Adding feature", feature);
@@ -55,17 +54,21 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
       });
 
       if (response.ok) {
+        setLoadingForm(false);
         await fetchData();
       } else {
+        setLoadingForm(false);
         console.error("Failed to add feature:", await response.text());
       }
     } catch (error) {
+      setLoadingForm(false);
       console.error("Error adding feature:", error);
     }
   };
   console.log(features);
 
   const handleEditFeature = async (id: string, feature: FeatureInput) => {
+    setLoadingForm(true);
     try {
       console.log("Editing feature", id, feature);
 
@@ -81,11 +84,14 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
         body: JSON.stringify({ id, ...processedFeature }),
       });
       if (response.ok) {
+        setLoadingForm(false);
         await fetchData();
       } else {
+        setLoadingForm(false);
         console.error("Failed to edit feature:", await response.text());
       }
     } catch (error) {
+      setLoadingForm(false);
       console.error("Error editing feature:", error);
     }
   };
@@ -104,6 +110,7 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
 
   // Step handlers
   const handleAddStep = async (step: Omit<Step, "id">) => {
+    setLoadingForm(true);
     const response = await fetch("/api/steps", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -111,11 +118,14 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
     });
 
     if (response.ok) {
+      setLoadingForm(false);
       await fetchData();
     }
   };
 
   const handleEditStep = async (id: string, step: Omit<Step, "id">) => {
+    setLoadingForm(true);
+
     const response = await fetch(`/api/steps`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -123,6 +133,7 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
     });
 
     if (response.ok) {
+      setLoadingForm(false);
       await fetchData();
     }
   };
@@ -140,15 +151,17 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
   };
 
   return (
-    <div className="admin-content p-6 space-y-8">
-      <div className="flex justify-between items-center">
+    <div className="admin-content pt-6 mb-10">
+      <div className="flex justify-between items-center mb-[50px]">
         <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-        <button
+        <Button
           onClick={onLogout}
-          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+          variant="contained"
+          color="error"
+          className="capitalize px-5 rounded-md text-[16px]"
         >
-          Logout
-        </button>
+          Log Out
+        </Button>
       </div>
 
       <Features
@@ -157,6 +170,7 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
         onAdd={handleAddFeature}
         onEdit={handleEditFeature}
         onDelete={handleDeleteFeature}
+        loadingForm={loadingForm}
       />
 
       <Steps
@@ -165,6 +179,7 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
         onAdd={handleAddStep}
         onEdit={handleEditStep}
         onDelete={handleDeleteStep}
+        loadingForm={loadingForm}
       />
     </div>
   );

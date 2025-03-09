@@ -24,6 +24,7 @@ export type Feature = {
 export interface FeaturesProps {
   features: Feature[];
   loading: boolean;
+  loadingForm: boolean;
   onAdd: (feature: FeatureInput) => Promise<void>;
   onEdit: (id: string, feature: FeatureInput) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
@@ -43,7 +44,7 @@ export interface Column<T> {
 
 export interface TableProps<T> {
   columns: Column<T>[];
-  data: T[];
+  data: T[] | [];
   loading?: boolean;
   emptyMessage?: string;
 }
@@ -51,6 +52,7 @@ export interface TableProps<T> {
 export interface StepsProps {
   steps: Step[];
   loading: boolean;
+  loadingForm: boolean;
   onAdd: (step: Omit<Step, "id">) => Promise<void>;
   onEdit: (id: string, step: Omit<Step, "id">) => Promise<void>;
   onDelete: (id: string) => Promise<void>;

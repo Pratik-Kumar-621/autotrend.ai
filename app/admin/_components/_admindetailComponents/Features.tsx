@@ -2,7 +2,10 @@ import React, { useState, useRef } from "react";
 import Table from "./Table";
 import Modal from "./Modal";
 import Image from "next/image";
-import { Feature, FeatureForm, FeaturesProps } from "./detailTypes";
+import { Feature, FeatureForm, FeaturesProps } from "../../adminTypes";
+import { Button, IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const Features: React.FC<FeaturesProps> = ({
   features,
@@ -10,6 +13,7 @@ const Features: React.FC<FeaturesProps> = ({
   onAdd,
   onEdit,
   onDelete,
+  loadingForm,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingFeature, setEditingFeature] = useState<Feature | null>(null);
@@ -95,7 +99,7 @@ const Features: React.FC<FeaturesProps> = ({
               width={64}
               height={64}
               alt="Feature"
-              className="absolute inset-0 w-full h-full object-cover rounded"
+              className="absolute inset-0 w-full h-full bg-white object-cover rounded"
             />
           </div>
         ) : (
@@ -103,46 +107,38 @@ const Features: React.FC<FeaturesProps> = ({
         ),
     },
     {
-      header: "Created At",
-      accessor: "createdAt",
-      render: (value: Date) => new Date(value).toLocaleDateString(),
-    },
-    {
       header: "Actions",
       accessor: "id",
       render: (_: unknown, item: Feature) => (
         <>
-          <button
-            onClick={() => handleEdit(item)}
-            className="text-blue-500 hover:text-blue-700 mr-2"
-          >
-            Edit
-          </button>
-          <button
-            onClick={() => handleDelete(item.id)}
-            className="text-red-500 hover:text-red-700"
-          >
-            Delete
-          </button>
+          <IconButton onClick={() => handleEdit(item)} color="primary">
+            <EditIcon className="text-[20px]" />
+          </IconButton>
+          &nbsp;
+          <IconButton onClick={() => handleDelete(item.id)} color="error">
+            <DeleteIcon className="text-[20px]" />
+          </IconButton>
         </>
       ),
     },
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <div className="flex justify-between items-center mb-4">
+    <div className="border border-[#555555] rounded-lg shadow p-6 mb-10">
+      <div className="flex justify-between items-center mb-7">
         <h2 className="text-xl font-semibold">Features</h2>
-        <button
+        <Button
+          variant="contained"
+          color="success"
           onClick={() => {
             setEditingFeature(null);
             setForm({ title: "", description: "", image: null });
             setIsModalOpen(true);
           }}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          className="px-4 py-2 capitalize text-[16px] rounded-md"
         >
           Add Feature
-        </button>
+        </Button>
       </div>
 
       <Table
@@ -163,7 +159,7 @@ const Features: React.FC<FeaturesProps> = ({
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Title
             </label>
             <input
@@ -175,7 +171,7 @@ const Features: React.FC<FeaturesProps> = ({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Description
             </label>
             <textarea
@@ -189,7 +185,7 @@ const Features: React.FC<FeaturesProps> = ({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Image
             </label>
             <div className="mt-1 flex items-center space-x-4">
@@ -201,13 +197,15 @@ const Features: React.FC<FeaturesProps> = ({
                 className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
               {form.image && (
-                <button
+                <Button
                   type="button"
+                  variant="outlined"
+                  color="error"
                   onClick={handleRemoveImage}
-                  className="text-red-500 hover:text-red-700"
+                  className="capitalize text-[16px] rounded-md px-7"
                 >
                   Remove
-                </button>
+                </Button>
               )}
             </div>
             {form.image && (
@@ -223,23 +221,33 @@ const Features: React.FC<FeaturesProps> = ({
             )}
           </div>
           <div className="flex justify-end space-x-2">
-            <button
+            <Button
+              variant="outlined"
+              color="inherit"
               type="button"
               onClick={() => {
                 setIsModalOpen(false);
                 setEditingFeature(null);
                 setForm({ title: "", description: "", image: null });
               }}
-              className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
+              className="px-4 py-2 border capitalize text-[16px] rounded-md w-[100px]"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            &nbsp; &nbsp;
+            <Button
+              variant="contained"
+              color="success"
               type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              disabled={loadingForm}
+              className="px-4 py-2 capitalize text-[16px] rounded-md w-[100px]"
             >
-              {editingFeature ? "Update" : "Add"}
-            </button>
+              {editingFeature ? (
+                <>{loadingForm ? "Updating..." : "Update"} </>
+              ) : (
+                <>{loadingForm ? "Adding..." : "Add"} </>
+              )}
+            </Button>
           </div>
         </form>
       </Modal>
