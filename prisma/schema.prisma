@@ -11,11 +11,13 @@ model Feature {
     id          String   @id @default(uuid()) @db.Uuid
     title       String
     description String
+    sequence    Int
     image       String?
     createdAt   DateTime @default(now())
 }
 
 model Step {
-    id   String @id @default(uuid()) @db.Uuid
-    step String
+    id       String @id @default(uuid()) @db.Uuid
+    sequence Int
+    step     String
 }

@@ -8,6 +8,11 @@ export type navLinkType = {
 export const NavLinks: navLinkType[] = [
   {
     type: "page-scroll",
+    name: "Explore",
+    link: "#landing-explore",
+  },
+  {
+    type: "page-scroll",
     name: "Features",
     link: "#landing-features",
   },
@@ -18,17 +23,7 @@ export const NavLinks: navLinkType[] = [
   },
   {
     type: "page-scroll",
-    name: "Explore",
-    link: "#landing-explore",
-  },
-  {
-    type: "page-scroll",
     name: "Contact",
     link: "#landing-contact",
-  },
-  {
-    type: "link",
-    name: "Login",
-    link: "#",
   },
 ];

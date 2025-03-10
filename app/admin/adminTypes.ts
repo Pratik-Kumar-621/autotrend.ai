@@ -11,6 +11,7 @@ export type FeatureInput = {
   title: string;
   description: string;
   image: string | null;
+  sequence: number;
 };
 
 export type Feature = {
@@ -18,6 +19,7 @@ export type Feature = {
   title: string;
   description: string;
   image: string | null;
+  sequence: number;
   createdAt: Date;
 };
 
@@ -34,6 +36,7 @@ export interface FeatureForm {
   title: string;
   description: string;
   image: string | null;
+  sequence: number;
 }
 
 export interface Column<T> {
@@ -60,11 +63,13 @@ export interface StepsProps {
 
 export interface StepForm {
   step: string;
+  sequence: number;
 }
 
 export type Step = {
   id: string;
   step: string;
+  sequence: number;
 };
 export interface ModalProps {
   isOpen: boolean;

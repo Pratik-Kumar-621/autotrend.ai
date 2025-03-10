@@ -20,7 +20,6 @@ const Table = <T extends Record<string, any>>({
       <table className="w-full">
         <thead>
           <tr className="bg-[#716f6f]">
-            <th className="px-4 py-2 text-center">#</th>
             {columns.map((column, index) => (
               <th
                 key={index}
@@ -34,23 +33,24 @@ const Table = <T extends Record<string, any>>({
           </tr>
         </thead>
         <tbody>
-          {data?.map((item, rowIndex) => (
-            <tr key={rowIndex} className="border-t">
-              <td className="px-4 py-2 text-center">{rowIndex + 1}</td>
-              {columns.map((column, colIndex) => (
-                <td
-                  key={`${rowIndex}-${colIndex}`}
-                  className={`px-4 py-2 max-w-[400px] ${
-                    column.header === "Actions" ? "text-center" : "text-left"
-                  }`}
-                >
-                  {column.render
-                    ? column.render(item[column.accessor], item)
-                    : item[column.accessor]}
-                </td>
-              ))}
-            </tr>
-          ))}
+          {data
+            .sort((a, b) => a.sequence - b.sequence)
+            .map((item, rowIndex) => (
+              <tr key={rowIndex} className="border-t">
+                {columns.map((column, colIndex) => (
+                  <td
+                    key={`${rowIndex}-${colIndex}`}
+                    className={`px-4 py-2 max-w-[400px] ${
+                      column.header === "Actions" ? "text-center" : "text-left"
+                    }`}
+                  >
+                    {column.render
+                      ? column.render(item[column.accessor], item)
+                      : item[column.accessor]}
+                  </td>
+                ))}
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

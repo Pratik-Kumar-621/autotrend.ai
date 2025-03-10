@@ -39,10 +39,10 @@ export const POST = async (request: Request) => {
 export const PUT = async (request: Request) => {
   try {
     const data = await request.json();
-    const { id, title, description, image } = data;
+    const { id, title, description, image, sequence } = data;
     const updatedFeature = await prisma.feature.update({
       where: { id: id },
-      data: { title, description, image },
+      data: { title, description, image, sequence },
     });
     return new Response(JSON.stringify(updatedFeature), {
       status: 200,

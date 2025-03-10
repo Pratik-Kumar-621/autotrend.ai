@@ -5,6 +5,13 @@ import Button from "@mui/material/Button";
 import Image from "next/image";
 
 const LandingHeroNav = () => {
+  const handleScroll = (link: string) => {
+    const targetElement = document.querySelector(link);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div className="landing-hero-nav">
       <div className="landing-hero-nav-logo">
@@ -16,12 +23,16 @@ const LandingHeroNav = () => {
           <Button
             variant="text"
             key={link.name}
-            href={link.link}
+            onClick={() => handleScroll(link.link)}
             className="landing-hero-nav-links-item"
           >
             {link.name}
           </Button>
         ))}
+        &nbsp; &nbsp;
+        <Button variant="contained" className="landing-hero-nav-links-item">
+          Login
+        </Button>
       </div>
     </div>
   );

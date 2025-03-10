@@ -3,6 +3,7 @@ import React from "react";
 import { useForm } from "@formspree/react";
 import { toast } from "react-toastify";
 import { Button } from "@mui/material";
+import SectionHeading from "../SectionHeading";
 
 const LandingContact = () => {
   const [state, handleSubmit, reset] = useForm("mwpleooq");
@@ -43,11 +44,11 @@ const LandingContact = () => {
       className="landing-content landing-contact text-white"
       id="landing-contact"
     >
-      <h2 className="text-3xl font-bold text-center mb-4">Send us a Message</h2>
-      <p className="text-center text-lg mb-8 px-4">
-        {"We'd"} love to hear from you! Please fill out the form below and{" "}
-        {"we'll"} get in touch with you shortly.
-      </p>
+      <SectionHeading
+        heading="Send us a message"
+        subheading={`We'd love to hear from you! Please fill out the form below and
+        we'll get in touch with you shortly.`}
+      />
       <div className="flex justify-center ">
         <form
           onSubmit={handleSubmit}

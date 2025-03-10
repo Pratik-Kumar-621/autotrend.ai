@@ -21,6 +21,7 @@ const Features: React.FC<FeaturesProps> = ({
     title: "",
     description: "",
     image: null,
+    sequence: 0,
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -86,6 +87,7 @@ const Features: React.FC<FeaturesProps> = ({
   };
 
   const columns = [
+    { header: "Steps", accessor: "sequence" },
     { header: "Title", accessor: "title" },
     { header: "Description", accessor: "description" },
     {
@@ -132,7 +134,7 @@ const Features: React.FC<FeaturesProps> = ({
           color="success"
           onClick={() => {
             setEditingFeature(null);
-            setForm({ title: "", description: "", image: null });
+            setForm({ title: "", description: "", image: null, sequence: 0 });
             setIsModalOpen(true);
           }}
           className="!px-4 !capitalize !text-[16px] !rounded-md "
@@ -153,11 +155,23 @@ const Features: React.FC<FeaturesProps> = ({
         onClose={() => {
           setIsModalOpen(false);
           setEditingFeature(null);
-          setForm({ title: "", description: "", image: null });
+          setForm({ title: "", description: "", image: null, sequence: 0 });
         }}
         title={editingFeature ? "Edit Feature" : "Add Feature"}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Sequence
+            </label>
+            <input
+              type="number"
+              value={form.sequence}
+              onChange={(e) => setForm({ ...form, sequence: +e.target.value })}
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+              required
+            />
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Title
@@ -228,7 +242,12 @@ const Features: React.FC<FeaturesProps> = ({
               onClick={() => {
                 setIsModalOpen(false);
                 setEditingFeature(null);
-                setForm({ title: "", description: "", image: null });
+                setForm({
+                  title: "",
+                  description: "",
+                  image: null,
+                  sequence: 0,
+                });
               }}
               className="!px-4 !capitalize !text-[16px] !rounded-md !w-[100px]"
             >

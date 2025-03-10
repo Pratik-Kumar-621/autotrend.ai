@@ -18,6 +18,7 @@ const Steps: React.FC<StepsProps> = ({
   const [editingStep, setEditingStep] = useState<Step | null>(null);
   const [form, setForm] = useState<StepForm>({
     step: "",
+    sequence: 0,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,7 +31,7 @@ const Steps: React.FC<StepsProps> = ({
       }
       setIsModalOpen(false);
       setEditingStep(null);
-      setForm({ step: "" });
+      setForm({ step: "", sequence: 0 });
     } catch (error) {
       console.error("Error submitting step:", error);
     }
@@ -38,7 +39,7 @@ const Steps: React.FC<StepsProps> = ({
 
   const handleEdit = (step: Step) => {
     setEditingStep(step);
-    setForm({ step: step.step });
+    setForm({ step: step.step, sequence: step.sequence });
     setIsModalOpen(true);
   };
 
@@ -48,6 +49,7 @@ const Steps: React.FC<StepsProps> = ({
   };
 
   const columns = [
+    { header: "Steps", accessor: "sequence" },
     { header: "Step", accessor: "step" },
     {
       header: "Actions",
@@ -75,7 +77,7 @@ const Steps: React.FC<StepsProps> = ({
           color="success"
           onClick={() => {
             setEditingStep(null);
-            setForm({ step: "" });
+            setForm({ step: "", sequence: 0 });
             setIsModalOpen(true);
           }}
           className="!px-4 !capitalize !text-[16px] !rounded-md"
@@ -96,18 +98,30 @@ const Steps: React.FC<StepsProps> = ({
         onClose={() => {
           setIsModalOpen(false);
           setEditingStep(null);
-          setForm({ step: "" });
+          setForm({ step: "", sequence: 0 });
         }}
         title={editingStep ? "Edit Step" : "Add Step"}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="mb-5">
             <label className="block text-sm font-medium text-gray-700 mb-2">
+              Sequence
+            </label>
+            <input
+              type="number"
+              value={form.sequence}
+              onChange={(e) => setForm({ ...form, sequence: +e.target.value })}
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+              required
+            />
+          </div>
+          <div className="mb-5">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Step
             </label>
             <textarea
               value={form.step}
-              onChange={(e) => setForm({ step: e.target.value })}
+              onChange={(e) => setForm({ ...form, step: e.target.value })}
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
               rows={3}
               required
@@ -121,7 +135,7 @@ const Steps: React.FC<StepsProps> = ({
               onClick={() => {
                 setIsModalOpen(false);
                 setEditingStep(null);
-                setForm({ step: "" });
+                setForm({ step: "", sequence: 0 });
               }}
               className="!px-4 !capitalize !text-[16px] !rounded-md !w-[100px]"
             >

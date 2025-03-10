@@ -7,7 +7,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      max-width: 1050px;
+      max-width: 1250px;
       margin: 0 auto;
       padding: 40px 0 0 0;
       &-logo {
@@ -37,11 +37,11 @@
     &-content {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       min-height: 50vh;
       gap: 40px;
-      margin: 0 auto 100px;
-      max-width: 1050px;
+      margin: 20px auto 50px;
+      max-width: 1250px;
 
       &-info {
         width: 50%;
@@ -107,8 +107,42 @@
     }
   }
   &-section {
-    min-height: 60vh;
+    max-width: 1250px;
+    margin: 0 auto;
     color: white;
+    padding-top: 40px;
+  }
+  &-feature {
+    margin-bottom: 50px;
+    &-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 40px;
+      &-item {
+        margin-top: 1rem;
+        border-radius: 11px;
+        background: rgb(0, 0, 0);
+        padding: 40px 30px;
+        border: 1px solid #818181;
+        &-icon {
+          background: rgb(147, 139, 139);
+          width: 52px;
+          height: 52px;
+          border-radius: 7px;
+          margin-bottom: 1rem;
+        }
+        h3 {
+          font-size: 24px;
+          font-weight: 700;
+          margin-bottom: 10px;
+        }
+        p {
+          font-size: 15px;
+          font-weight: 400;
+          line-height: 24px;
+        }
+      }
+    }
   }
   &-contact {
     display: block;

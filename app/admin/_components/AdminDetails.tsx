@@ -160,7 +160,7 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
           color="error"
           className="!capitalize !px-5 !rounded-md !text-[16px]"
         >
-          Log Out
+          Admin Logout
         </Button>
       </div>
 
