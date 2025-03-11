@@ -4,5 +4,6 @@
 
 <strong>Preview:</strong> https://autotrendai.vercel.app/
 
+## Workflow
 
-![WorkFlow](https://autotrendai.vercel.app/images/workflow.png)
+<img src="https://autotrendai.vercel.app/images/workflow.png" alt="Workflow" width="400"/>
