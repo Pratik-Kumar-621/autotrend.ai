@@ -4,6 +4,12 @@ import { Tooltip } from "@mui/material";
 import Image from "next/image";
 
 const LandingHeroContent = () => {
+  const handleClick = () => {
+    const targetElement = document.querySelector("#landing-explore");
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   return (
     <div className="landing-hero-content">
       <div className="landing-hero-content-info">
@@ -18,6 +24,7 @@ const LandingHeroContent = () => {
           <Button
             className="landing-hero-content-info-buttons-item-primary"
             variant="contained"
+            onClick={handleClick}
           >
             Explore&nbsp; ⇾
           </Button>
