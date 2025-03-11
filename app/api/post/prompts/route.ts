@@ -1,30 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { openai } from "@/utils/openai";
+
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const genAI = new GoogleGenerativeAI("AIzaSyDjuzVuWu-wM07EjC0lbCx1k-iCnqo3i-g");
 
 export async function POST(req: NextRequest) {
   const { keyword } = await req.json();
 
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4.5-preview",
-      messages: [
-        {
-          role: "system",
-          content: "You are an expert social media content creator.",
-        },
-        {
-          role: "user",
-          content: `Generate 5 creative social media post ideas for the keyword "${keyword}"`,
-        },
-      ],
-      max_tokens: 200,
-      n: 5,
-    });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const prompt = `Generate 10 prompts for engaging social media post ideas based on trending keyword: "${keyword}". 
+        Each prompt should contain maximum of 10 words and seperated by ###. Also provide only prompts, no explanation or context needed.`;
 
-    const prompts = response.choices.map(
-      (choice) => choice.message?.content?.trim() || ""
+    const result = await model.generateContent(prompt);
+    const text = result.response.text();
+
+    return NextResponse.json(
+      text.split("\n").filter((t) => t !== "###" && t !== ""),
+      { status: 200 }
     );
-    return NextResponse.json({ prompts });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

@@ -13,6 +13,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@formspree/react": "^2.5.4",
+    "@google/generative-ai": "^0.24.0",
     "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.4.7",
     "@next-auth/prisma-adapter": "^1.0.7",
