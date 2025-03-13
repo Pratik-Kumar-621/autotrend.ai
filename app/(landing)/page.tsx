@@ -49,8 +49,8 @@ export default function Home() {
       <LandingExplore />
       {!loading && (
         <>
-          <LandingFeatures {...{ features }} />
-          <LandingSteps {...{ steps }} />
+          {features.length !== 0 && <LandingFeatures {...{ features }} />}
+          {steps.length !== 0 && <LandingSteps {...{ steps }} />}
         </>
       )}
       <LandingContact />
