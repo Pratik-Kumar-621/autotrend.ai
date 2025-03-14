@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const genAI = new GoogleGenerativeAI("AIzaSyDjuzVuWu-wM07EjC0lbCx1k-iCnqo3i-g");
+import { genAI } from "../genAI";
 
 export async function POST(req: NextRequest) {
   const { keyword } = await req.json();

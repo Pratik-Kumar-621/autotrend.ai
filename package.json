@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@fal-ai/client": "^1.2.3",
     "@formspree/react": "^2.5.4",
     "@google/generative-ai": "^0.24.0",
     "@mui/icons-material": "^6.4.7",

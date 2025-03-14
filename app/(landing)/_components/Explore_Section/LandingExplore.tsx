@@ -5,6 +5,7 @@ import PromptGereration from "./PromptGereration";
 const LandingExplore = () => {
   const [keyword, setKeyword] = useState("");
   const [posts, setPosts] = useState<string[]>([]);
+  const [selectedPrompt, setSelectedPrompt] = useState<string | null>(null);
 
   console.log(posts);
 
@@ -20,9 +21,18 @@ const LandingExplore = () => {
           <h2>Generated Prompts</h2>
           <ul>
             {posts.map((post, index) => (
-              <li key={index}>{post}</li>
+              <li key={index} onClick={() => setSelectedPrompt(post)}>
+                {post}
+              </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {selectedPrompt && (
+        <div>
+          <h2>Selected Prompt</h2>
+          <p>{selectedPrompt}</p>
         </div>
       )}
     </div>
