@@ -7,3 +7,9 @@
 ## Workflow
 
 <img src="https://autotrendai.vercel.app/images/workflow.png" alt="Workflow" width="400"/>
+
+## Resources Used
+
+1. For Prompt Generation: <strong>OpenAI</strong>
+2. For Image Generation: <strong>Vertex</strong>
+3. For Authentication: <strong>Firebase</strong>
