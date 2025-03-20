@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import SectionHeading from "../SectionHeading";
 import PromptGereration from "./PromptGereration";
+import SelectedPrompt from "./SelectedPrompt";
+import GeneratedImage from "./GeneratedImage";
 
 const LandingExplore = () => {
   const [keyword, setKeyword] = useState("");
@@ -29,12 +31,8 @@ const LandingExplore = () => {
         </div>
       )}
 
-      {selectedPrompt && (
-        <div>
-          <h2>Selected Prompt</h2>
-          <p>{selectedPrompt}</p>
-        </div>
-      )}
+      {selectedPrompt && <SelectedPrompt {...{ selectedPrompt }} />}
+      {selectedPrompt && <GeneratedImage {...{ selectedPrompt }} />}
     </div>
   );
 };

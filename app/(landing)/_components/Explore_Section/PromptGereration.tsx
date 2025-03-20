@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import React from "react";
 
 interface PromptGererationProps {
@@ -8,7 +9,9 @@ interface PromptGererationProps {
 
 const PromptGereration = (props: PromptGererationProps) => {
   const { keyword, setKeyword, setPosts } = props;
+  const [loading, setLoading] = React.useState(false);
   const handleGenerate = async () => {
+    setLoading(true);
     const res = await fetch("/api/post/prompts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -18,8 +21,10 @@ const PromptGereration = (props: PromptGererationProps) => {
     if (res.ok) {
       const data = await res.json();
       setPosts(data);
+      setLoading(false);
       console.log(data);
     } else {
+      setLoading(false);
       console.log("something went wrong");
     }
   };
@@ -33,7 +38,13 @@ const PromptGereration = (props: PromptGererationProps) => {
         placeholder="Enter keyword"
         className="text-black"
       />
-      <button onClick={handleGenerate}>Generate Posts</button>
+      <Button
+        variant="contained"
+        disabled={loading || !keyword}
+        onClick={handleGenerate}
+      >
+        {loading ? "Generating..." : "Generate"}
+      </Button>
     </div>
   );
 };
