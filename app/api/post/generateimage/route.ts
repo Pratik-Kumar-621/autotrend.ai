@@ -1,20 +1,29 @@
-import { fal } from "@fal-ai/client";
+import { NextRequest, NextResponse } from "next/server";
+import OpenAI from "openai";
 
-fal.config({
-  credentials: "YOUR_FAL_KEY",
-});
+export async function POST(req: NextRequest) {
+  const { keyword } = await req.json();
+  try {
+    const client = new OpenAI({
+      baseURL: "https://api.studio.nebius.com/v1/",
+      apiKey: process.env.FAL_API_KEY,
+    });
+    const result = await client.images.generate({
+      model: "black-forest-labs/flux-schnell",
+      response_format: "b64_json",
 
-const result = await fal.subscribe("fal-ai/flux/dev", {
-  input: {
-    prompt:
-      'Extreme close-up of a single tiger eye, direct frontal view. Detailed iris and pupil. Sharp focus on eye texture and color. Natural lighting to capture authentic eye shine and depth. The word "FLUX" is painted over it in big, white brush strokes with visible texture.',
-  },
-  logs: true,
-  onQueueUpdate: (update) => {
-    if (update.status === "IN_PROGRESS") {
-      update.logs.map((log) => log.message).forEach(console.log);
-    }
-  },
-});
-console.log(result.data);
-console.log(result.requestId);
+      extra_body: {
+        response_extension: "webp",
+        width: 1024,
+        height: 1024,
+        num_inference_steps: 4,
+        negative_prompt: "",
+        seed: -1,
+      },
+      prompt: keyword,
+    });
+    return NextResponse.json(result.data[0], { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
