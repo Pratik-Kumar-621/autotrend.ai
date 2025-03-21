@@ -126,6 +126,17 @@
     color: white;
     padding-top: 40px;
   }
+  &-explore {
+    .css-12eb3rq-MuiStepLabel-label.Mui-completed {
+      color: green !important;
+    }
+    .css-12eb3rq-MuiStepLabel-label.Mui-active {
+      color: white !important;
+    }
+    .css-12eb3rq-MuiStepLabel-label {
+      color: rgb(155, 150, 150) !important;
+    }
+  }
   &-feature {
     margin-bottom: 50px;
     &-list {
