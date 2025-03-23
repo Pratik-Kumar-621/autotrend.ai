@@ -1,0 +1,23 @@
+@mixin activeContainedButton {
+  background-color: #7b6dd3 !important;
+  min-width: 140px !important;
+  font-size: 16px !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  text-transform: capitalize !important;
+  height: 44px !important;
+  border-radius: 7px !important;
+}
+
+@mixin activeOutlinedButton {
+  font-size: 16px !important;
+  border-color: #c8c7c7 !important;
+  color: #c8c7c7 !important;
+  font-weight: 600 !important;
+  text-transform: capitalize !important;
+  width: 150px !important;
+  height: 44px !important;
+  border-radius: 7px !important;
+}

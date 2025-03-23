@@ -13,6 +13,29 @@ const steps = [
   "Post on Socials",
 ];
 
+const buttonText = [
+  {
+    step: 1,
+    activeName: "Generate Prompts",
+    loadingName: "Generating...",
+  },
+  {
+    step: 2,
+    activeName: "Generate Image",
+    loadingName: "Generating...",
+  },
+  {
+    step: 3,
+    activeName: "Create Post",
+    loadingName: "Creating Post",
+  },
+  {
+    step: 4,
+    activeName: "Post on Social",
+    loadingName: "Posting...",
+  },
+];
+
 const LandingExplore = () => {
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -32,13 +55,15 @@ const LandingExplore = () => {
         heading="Generate trending posts"
         subheading="Create engaging and viral content effortlessly with AI"
       />
-      <Stepper activeStep={currentStep - 1} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
+      <div className="landing-explore-steps">
+        <Stepper activeStep={currentStep - 1} alternativeLabel>
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </div>
 
       <div className="landing-explore-stepper-content">
         {currentStep === 1 && (
@@ -64,25 +89,36 @@ const LandingExplore = () => {
       </div>
 
       <div className="landing-explore-stepper-buttons">
-        <div className="landing-explore-stepper-buttons-back">
-          <Button
-            variant="outlined"
-            disabled={currentStep === 1}
-            onClick={handleBack}
-          >
-            Back
-          </Button>
-        </div>
+        {currentStep > 1 && (
+          <div className="landing-explore-stepper-buttons-back">
+            <Button variant="outlined" onClick={handleBack}>
+              Back
+            </Button>
+          </div>
+        )}
+
         <div className="landing-explore-stepper-buttons-next">
-          {currentStep === 4 ? (
-            <Button variant="contained" onClick={handleSubmit}>
-              Submit
-            </Button>
-          ) : (
-            <Button variant="contained" onClick={handleNext}>
-              Next
-            </Button>
-          )}
+          {buttonText.map((item) => {
+            return (
+              <>
+                {currentStep === item.step ? (
+                  <Button
+                    variant="contained"
+                    key={item.step}
+                    onClick={() => {
+                      if (currentStep === 4) {
+                        handleSubmit();
+                      } else handleNext();
+                    }}
+                  >
+                    {item.activeName}
+                  </Button>
+                ) : (
+                  <></>
+                )}
+              </>
+            );
+          })}
         </div>
       </div>
     </div>
