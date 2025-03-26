@@ -203,7 +203,7 @@
         }
       }
       &-button {
-        margin-top: 40px;
+        margin-top: 40px !important;
         @include activeContainedButton;
 
         &:disabled {
