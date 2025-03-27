@@ -1,6 +1,6 @@
-import { Button } from "@mui/material";
-import React from "react";
-
+import { Button, IconButton, Tooltip } from "@mui/material";
+import React, { useEffect } from "react";
+import LoopIcon from "@mui/icons-material/Loop";
 interface PromptsType {
   loading: boolean;
   prompts: string[];
@@ -8,6 +8,8 @@ interface PromptsType {
   handleBack: () => void;
   selectedPrompt: string;
   setSelectedPrompt: (inp: string) => void;
+  bodyLoading: boolean;
+  handlePromptRegeneration: () => void;
 }
 
 const PromptGeneration = (props: PromptsType) => {
@@ -18,13 +20,24 @@ const PromptGeneration = (props: PromptsType) => {
     selectedPrompt,
     setSelectedPrompt,
     handleBack,
+    bodyLoading,
+    handlePromptRegeneration,
   } = props;
-  console.log(selectedPrompt);
+  useEffect(() => {
+    if (!selectedPrompt) {
+      setSelectedPrompt(prompts[0]);
+    }
+  }, [prompts]);
 
   return (
     <div className="landing-explore-prompts">
       <div className="landing-explore-prompts-heading">
-        Select any prompt to generate image
+        Select any prompt to generate image{" "}
+        <Tooltip title="Regenerate Images">
+          <IconButton color="inherit" onClick={handlePromptRegeneration}>
+            <LoopIcon />
+          </IconButton>
+        </Tooltip>
       </div>
       <div className="landing-explore-prompts-list">
         {prompts.map((item) => {
@@ -44,7 +57,6 @@ const PromptGeneration = (props: PromptsType) => {
                 checked={item === selectedPrompt}
                 onChange={() => setSelectedPrompt(item)}
               />
-
               {item}
             </label>
           );
@@ -53,7 +65,7 @@ const PromptGeneration = (props: PromptsType) => {
       <div className="landing-explore-prompts-buttons">
         <Button
           variant="outlined"
-          onClick={handleBack}
+          onClick={handleBack || bodyLoading}
           disabled={loading}
           className="landing-explore-prompts-buttons-back"
         >
@@ -63,7 +75,7 @@ const PromptGeneration = (props: PromptsType) => {
           variant="contained"
           onClick={handleImageGeneration}
           className="landing-explore-prompts-buttons-next"
-          disabled={!selectedPrompt || loading}
+          disabled={!selectedPrompt || loading || bodyLoading}
         >
           {loading ? "Generating..." : "Generate Images"}
         </Button>

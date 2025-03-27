@@ -9,8 +9,8 @@ export async function POST(req: NextRequest) {
       apiKey: process.env.FAL_API_KEY,
     });
     const result = await client.images.generate({
-      model: "black-forest-labs/flux-schnell",
-      response_format: "b64_json",
+      model: "stability-ai/sdxl",
+      response_format: "url",
 
       extra_body: {
         response_extension: "webp",

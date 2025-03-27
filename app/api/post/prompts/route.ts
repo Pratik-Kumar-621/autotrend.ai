@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
         Each prompt should contain atleast 15 words and atmost 18 words and seperated by ###. Also provide only prompts, no explanation or context needed. The prompts should be engaging and interesting to the audience. Also don't ask questions in the prompts.`;
 
     const result = await model.generateContent(prompt);
-    const text = result.response.text();
+    const text = result.response.text().replace("\n", "");
 
     return NextResponse.json(
       text.split("\n").filter((t) => t !== "###" && t !== ""),

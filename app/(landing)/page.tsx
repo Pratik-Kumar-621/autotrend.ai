@@ -19,25 +19,34 @@ fal.config({
 export default function Home() {
   const [features, setFeatures] = React.useState<Feature[]>([]);
   const [steps, setSteps] = React.useState<Step[]>([]);
+  const [suggestion, setSuggestion] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const [featuresResponse, stepsResponse] = await Promise.all([
-          fetch("/api/features"),
-          fetch("/api/steps"),
-        ]);
+        const [featuresResponse, stepsResponse, suggestionResponse] =
+          await Promise.all([
+            fetch("/api/features"),
+            fetch("/api/steps"),
+            fetch("/api/post/suggestedkeyword", { method: "POST" }),
+          ]);
 
-        if (!featuresResponse.ok || !stepsResponse.ok) {
+        if (
+          !featuresResponse.ok ||
+          !stepsResponse.ok ||
+          !suggestionResponse.ok
+        ) {
           throw new Error("Failed to fetch data");
         }
 
         const featuresData = await featuresResponse.json();
         const stepsData = await stepsResponse.json();
+        const suggestionData = await suggestionResponse.json();
 
         setFeatures(featuresData);
         setSteps(stepsData);
+        setSuggestion(suggestionData);
       } catch (error: any) {
         toast.error(`Failed to fetch data. Reason: ${error.message} `);
       } finally {
@@ -52,9 +61,9 @@ export default function Home() {
     <div className="landing">
       {loading && <LoadingScreen />}
       <LandingHero />
-      <LandingExplore />
       {!loading && (
         <>
+          <LandingExplore {...{ suggestion }} />
           {features.length !== 0 && <LandingFeatures {...{ features }} />}
           {steps.length !== 0 && <LandingSteps {...{ steps }} />}
         </>

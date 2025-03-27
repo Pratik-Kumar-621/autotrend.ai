@@ -130,6 +130,7 @@
   }
   &-explore {
     margin-bottom: 2rem;
+    padding: 40px 60px;
     &-steps {
       margin: 2rem auto 0;
       max-width: 850px;
@@ -173,6 +174,7 @@
     }
     &-keyword {
       width: 100%;
+
       text-align: center;
       &-heading {
         text-align: center;
@@ -181,8 +183,8 @@
         font-weight: bold;
       }
       &-input {
-        width: 100%;
         max-width: 600px;
+        width: 100%;
         input {
           color: white !important;
           border-radius: 11px !important;
@@ -199,6 +201,31 @@
 
           &:hover {
             border-color: white;
+          }
+        }
+      }
+      &-suggestions {
+        margin: 30px auto 0;
+        max-width: 1050px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &-heading {
+          font-weight: bolder;
+        }
+        &-list {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 14px;
+          font-size: 14px;
+          margin-left: 14px;
+          &-item {
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: 1px dashed rgb(241, 167, 225);
+            padding: 5px 10px;
+            border-radius: 7px;
           }
         }
       }
@@ -230,10 +257,70 @@
           input {
             display: none;
           }
+          transition: all 0.15s ease;
+        }
+        &-item-active {
+          color: rgb(215, 215, 215);
+          border: 1.5px solid white;
+          border-radius: 11px;
+          box-shadow: rgba(85, 85, 85, 0.965) 3px 5px 5px;
+        }
+      }
+      &-heading {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 21px;
+        font-weight: bold;
+      }
+      &-buttons {
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        &-next {
+          @include activeContainedButton;
+
+          &:disabled {
+            @include disabledContainedButton;
+            width: 179px !important;
+          }
+        }
+        &-back {
+          @include activeOutlinedButton;
+          &:disabled {
+            @include disabledOutlinedButton;
+          }
+        }
+      }
+    }
+    &-images {
+      width: 100%;
+      max-width: 1050px;
+      &-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        &-item {
+          border: 1px solid rgb(123, 121, 121);
+          padding: 10px;
+          border-radius: 11px;
+          color: rgb(123, 121, 121);
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          input {
+            display: none;
+          }
+          transition: all 0.2s ease;
         }
         &-item-active {
           color: rgb(215, 215, 215);
           border-color: white;
+          border-width: 3px;
+          box-shadow: rgba(184, 179, 179, 0.965) 0px 5px 15px;
+        }
+        img {
+          border-radius: 7px;
         }
       }
       &-heading {
