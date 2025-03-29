@@ -25,7 +25,7 @@ const ImageGeneration = (props: ImageGenProps) => {
   } = props;
   useEffect(() => {
     if (!selectedImage) {
-      setSelectedImage(image[0]?.url);
+      setSelectedImage(image[0].url);
     }
   }, [image]);
   return (

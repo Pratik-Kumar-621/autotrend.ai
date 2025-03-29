@@ -26,12 +26,21 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
     {}
   );
   const [bodyLoading, setBodyLoading] = useState(false);
+  const [description, setDescription] = useState(""); // Add state for description
 
   const handleNext = () => {
     setCurrentStep((prev) => prev + 1);
+    const targetElement = document.querySelector("#landing-explore");
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: "smooth" });
+    }
   };
   const handleBack = () => {
     setCurrentStep((prev) => prev - 1);
+    const targetElement = document.querySelector("#landing-explore");
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const handlePromptGeneration = async () => {
@@ -99,7 +108,7 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
 
     setLoading(true);
     try {
-      const imagePromises = Array.from({ length: 6 }, () => generateImage());
+      const imagePromises = Array.from({ length: 2 }, () => generateImage());
       const generatedImages = await Promise.all(imagePromises);
       setImage(generatedImages);
       setCachedImages((prev) => ({
@@ -117,7 +126,7 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
   const handleImageRegeneration = async () => {
     setBodyLoading(true);
     try {
-      const imagePromises = Array.from({ length: 6 }, () => generateImage());
+      const imagePromises = Array.from({ length: 2 }, () => generateImage());
       const regeneratedImages = await Promise.all(imagePromises);
       setImage(regeneratedImages);
       setCachedImages((prev) => ({
@@ -131,7 +140,25 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
     }
   };
 
-  const handlePostGeneration = () => {};
+  const handlePostGeneration = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/post/description", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: selectedPrompt }),
+      });
+      const data = await response.json();
+      setDescription(data);
+      handleNext();
+    } catch (error) {
+      console.error("Error generating description:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="landing-section landing-explore" id="landing-explore">
@@ -185,7 +212,15 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
         )}
         {currentStep === 4 && (
           <div className="landing-explore-stepper-content-social">
-            <PostingOnSocial />
+            <PostingOnSocial
+              {...{
+                handleBack,
+                loading,
+                bodyLoading,
+                selectedImage,
+                description,
+              }}
+            />
           </div>
         )}
       </div>
