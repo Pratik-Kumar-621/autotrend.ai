@@ -32,14 +32,6 @@ export default function Home() {
             fetch("/api/post/suggestedkeyword", { method: "POST" }),
           ]);
 
-        if (
-          !featuresResponse.ok ||
-          !stepsResponse.ok ||
-          !suggestionResponse.ok
-        ) {
-          throw new Error("Failed to fetch data");
-        }
-
         const featuresData = await featuresResponse.json();
         const stepsData = await stepsResponse.json();
         const suggestionData = await suggestionResponse.json();
@@ -48,7 +40,7 @@ export default function Home() {
         setSteps(stepsData);
         setSuggestion(suggestionData);
       } catch (error: any) {
-        toast.error(`Failed to fetch data. Reason: ${error.message} `);
+        toast.error(`Failed to fetch data. Reason: ${error.message}`);
       } finally {
         setLoading(false);
       }

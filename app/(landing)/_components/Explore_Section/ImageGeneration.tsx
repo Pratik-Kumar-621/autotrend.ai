@@ -24,9 +24,7 @@ const ImageGeneration = (props: ImageGenProps) => {
     handleImageRegeneration,
   } = props;
   useEffect(() => {
-    if (!selectedImage) {
-      setSelectedImage(image[0].url);
-    }
+    setSelectedImage(image[0].url);
   }, [image]);
   return (
     <div className="landing-explore-images">
