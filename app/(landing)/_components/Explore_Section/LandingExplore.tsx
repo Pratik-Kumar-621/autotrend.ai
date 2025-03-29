@@ -108,7 +108,7 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
 
     setLoading(true);
     try {
-      const imagePromises = Array.from({ length: 2 }, () => generateImage());
+      const imagePromises = Array.from({ length: 5 }, () => generateImage());
       const generatedImages = await Promise.all(imagePromises);
       setImage(generatedImages);
       setCachedImages((prev) => ({
@@ -126,7 +126,7 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
   const handleImageRegeneration = async () => {
     setBodyLoading(true);
     try {
-      const imagePromises = Array.from({ length: 2 }, () => generateImage());
+      const imagePromises = Array.from({ length: 5 }, () => generateImage());
       const regeneratedImages = await Promise.all(imagePromises);
       setImage(regeneratedImages);
       setCachedImages((prev) => ({
