@@ -159,7 +159,24 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
       setLoading(false);
     }
   };
-
+  const handlePostRegeneration = async () => {
+    setBodyLoading(true);
+    try {
+      const response = await fetch("/api/post/description", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: selectedPrompt }),
+      });
+      const data = await response.json();
+      setDescription(data);
+    } catch (error) {
+      console.error("Error generating description:", error);
+    } finally {
+      setBodyLoading(false);
+    }
+  };
   return (
     <div className="landing-section landing-explore" id="landing-explore">
       <SectionHeading
@@ -219,6 +236,7 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
                 bodyLoading,
                 selectedImage,
                 description,
+                handlePostRegeneration,
               }}
             />
           </div>

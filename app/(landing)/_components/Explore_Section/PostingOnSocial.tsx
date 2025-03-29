@@ -1,9 +1,11 @@
-import { Button, Tooltip } from "@mui/material";
 import Image from "next/image";
-import React from "react";
-
+import React, { useState } from "react";
+import { Button, IconButton, Tooltip } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import CachedIcon from "@mui/icons-material/Cached";
 interface SocialProps {
   handleBack: () => void;
+  handlePostRegeneration: () => void;
   loading: boolean;
   bodyLoading: boolean;
   selectedImage: any;
@@ -11,8 +13,34 @@ interface SocialProps {
 }
 
 const PostingOnSocial = (props: SocialProps) => {
-  const { handleBack, loading, bodyLoading, selectedImage, description } =
-    props;
+  const {
+    handleBack,
+    loading,
+    bodyLoading,
+    selectedImage,
+    description,
+    handlePostRegeneration,
+  } = props;
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedDescription, setEditedDescription] = useState(description);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleDescriptionChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setEditedDescription(event.target.value);
+  };
+
+  const handleDescriptionSave = (e) => {
+    e.preventDefault();
+    setIsEditing(false);
+    // Optionally, you can add a callback here to save the edited description
+  };
+
   return (
     <div className="landing-explore-social">
       <div className="landing-explore-social-heading">
@@ -23,8 +51,38 @@ const PostingOnSocial = (props: SocialProps) => {
         <Image src={selectedImage} alt="Post Image" width={400} height={400} />
       </div>
       <div className="landing-explore-social-description">
-        <strong>Description: </strong>
-        {description}
+        <div className="landing-explore-social-description-buttons">
+          <strong>Description: </strong>
+          <Tooltip title="Regenerate Description">
+            <IconButton color="inherit" onClick={handlePostRegeneration}>
+              <CachedIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Edit Description">
+            <IconButton color="inherit" onClick={handleEditClick}>
+              <EditIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        </div>
+        <div className="landing-explore-social-description-text">
+          {isEditing ? (
+            <form
+              onSubmit={handleDescriptionSave}
+              className="landing-explore-social-description-text-change"
+            >
+              <textarea
+                value={editedDescription}
+                onChange={handleDescriptionChange}
+                autoFocus
+              />
+              <Button variant="outlined" type="submit">
+                Update Description
+              </Button>
+            </form>
+          ) : (
+            editedDescription
+          )}
+        </div>
       </div>
       <div className="landing-explore-social-buttons">
         <Button
