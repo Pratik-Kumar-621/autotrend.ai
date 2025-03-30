@@ -55,7 +55,7 @@ export default function Home() {
 
   return (
     <div className="landing">
-      {loading && loadingAuth && <LoadingScreen />}
+      {(loading || loadingAuth) && <LoadingScreen />}
       <LandingHero />
       {!loading && (
         <>

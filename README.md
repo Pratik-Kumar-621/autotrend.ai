@@ -1,4 +1,4 @@
-# AutoTrend.aioi
+# AutoTrend.ai
 
 ### Generate trending posts in one click
 
