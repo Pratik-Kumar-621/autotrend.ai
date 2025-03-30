@@ -19,7 +19,7 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export function LoginModal({ open, handleClose }: LoginModalProps) {
-  const { signInWithGoogle, signInWithTwitter, user } = useAuth();
+  const { signInWithGoogle, signInWithTwitter } = useAuth();
 
   return (
     <Dialog
