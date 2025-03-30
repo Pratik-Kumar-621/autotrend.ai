@@ -1,0 +1,33 @@
+@import "./mixins";
+
+.login-dialog {
+  border-radius: 1rem !important;
+  &-content {
+    width: 100%;
+    max-width: 400px;
+    padding: 1rem 1.8rem;
+
+    &-heading {
+      text-align: center;
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    &-buttons {
+      button {
+        @include activeOutlinedButton;
+        width: 100% !important;
+        color: #7b6dd3 !important;
+        border-color: #7b6dd3 !important;
+        margin-bottom: 20px;
+        svg {
+          margin-right: 10px;
+        }
+        &:disabled {
+          @include disabledOutlinedButton;
+          width: 100% !important;
+        }
+      }
+    }
+  }
+}

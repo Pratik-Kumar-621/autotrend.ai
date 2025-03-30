@@ -1,4 +1,5 @@
 @import "./mixins";
+@import "./logindialog";
 
 .landing {
   background-color: #171717;
@@ -33,7 +34,19 @@
           height: 40px !important;
           border-radius: 7px !important;
           padding: 0 20px !important;
+          &-logout {
+            font-size: 16px !important;
+            font-weight: 500 !important;
+            text-transform: none !important;
+            height: 40px !important;
+            border-radius: 7px !important;
+            padding: 0 20px 0 10px !important;
 
+            svg {
+              transform: scale(0.8);
+              margin-right: 5px;
+            }
+          }
           &-login {
             font-size: 16px !important;
             font-weight: 500 !important;
