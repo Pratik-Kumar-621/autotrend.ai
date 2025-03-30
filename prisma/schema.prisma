@@ -21,3 +21,11 @@ model Step {
     sequence Int
     step     String
 }
+
+model Posts {
+    id          String   @id @default(uuid()) @db.Uuid
+    image       String?
+    description String
+    keyword     String
+    postedAt    String[]
+}

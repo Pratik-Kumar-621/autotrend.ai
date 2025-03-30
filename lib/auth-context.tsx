@@ -20,6 +20,7 @@ interface AuthContextType {
   signInWithFacebook: () => Promise<void>;
   signInWithTwitter: () => Promise<void>;
   logout: () => Promise<void>;
+  token: string;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -29,11 +30,13 @@ const AuthContext = createContext<AuthContextType>({
   signInWithFacebook: async () => {},
   signInWithTwitter: async () => {},
   logout: async () => {},
+  token: "",
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -43,24 +46,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (user) {
         // Get the ID token
         const idToken = await user.getIdToken();
-
-        // Send the token to your backend to create a session
-        const response = await fetch("/api/auth/session", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ idToken }),
-        });
-
-        if (!response.ok) {
-          console.error("Failed to create session");
-        }
+        setToken(idToken);
+        // Save the token to localStorage
+        localStorage.setItem("authToken", idToken);
       } else {
         // Clear the session when user logs out
-        await fetch("/api/auth/session", {
-          method: "DELETE",
-        });
+        setToken("");
+        localStorage.removeItem("authToken");
       }
     });
 
@@ -102,6 +94,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await signOut(auth);
       redirect("/");
+      setToken("");
     } catch (error) {
       console.error("Error signing out:", error);
       throw error;
@@ -119,6 +112,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signInWithFacebook,
         signInWithTwitter,
         logout,
+        token,
       }}
     >
       {children}

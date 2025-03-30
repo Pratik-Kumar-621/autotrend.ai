@@ -23,8 +23,7 @@ export default function Home() {
   const [steps, setSteps] = React.useState<Step[]>([]);
   const [suggestion, setSuggestion] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const { user, loadingAuth } = useAuth();
-  console.log(user);
+  const { loadingAuth } = useAuth();
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +50,7 @@ export default function Home() {
     };
 
     fetchData();
-  }, []);
+  }, [loadingAuth]); // Removed token dependency and added localStorage check
 
   return (
     <div className="landing">
