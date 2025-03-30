@@ -11,10 +11,11 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "./firebase";
+import { redirect } from "next/navigation";
 
 interface AuthContextType {
   user: User | null;
-  loading: boolean;
+  loadingAuth: boolean;
   signInWithGoogle: () => Promise<void>;
   signInWithFacebook: () => Promise<void>;
   signInWithTwitter: () => Promise<void>;
@@ -23,7 +24,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
-  loading: true,
+  loadingAuth: true,
   signInWithGoogle: async () => {},
   signInWithFacebook: async () => {},
   signInWithTwitter: async () => {},
@@ -32,12 +33,12 @@ const AuthContext = createContext<AuthContextType>({
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loadingAuth, setLoadingAuth] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
-      setLoading(false);
+      setLoadingAuth(false);
 
       if (user) {
         // Get the ID token
@@ -97,11 +98,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
+    setLoadingAuth(true);
     try {
       await signOut(auth);
+      redirect("/");
     } catch (error) {
       console.error("Error signing out:", error);
       throw error;
+    } finally {
+      setLoadingAuth(false);
     }
   };
 
@@ -109,7 +114,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
-        loading,
+        loadingAuth,
         signInWithGoogle,
         signInWithFacebook,
         signInWithTwitter,

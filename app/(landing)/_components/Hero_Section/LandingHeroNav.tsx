@@ -1,15 +1,19 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLinks } from "../../_landing_data/navLinks";
 import Button from "@mui/material/Button";
 import Image from "next/image";
-import { LoginModal } from "@/components/auth/login-modal";
 import { useAuth } from "@/lib/auth-context";
 import Link from "next/link";
+import { LoginModal } from "../LoginModal";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 
 const LandingHeroNav = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = React.useState(false);
-  const { user, logout } = useAuth();
+  const { user, logout, loadingAuth } = useAuth();
+  useEffect(() => {
+    if (user !== null) setIsLoginModalOpen(false);
+  }, [user]);
 
   const handleScroll = (link: string) => {
     const targetElement = document.querySelector(link);
@@ -41,39 +45,46 @@ const LandingHeroNav = () => {
               {link.name}
             </Button>
           ))}
-          &nbsp; &nbsp;
-          {user ? (
-            <div className="flex items-center gap-4">
-              <Link href="/dashboard">
-                <Button
-                  variant="contained"
-                  className="landing-hero-nav-links-item-login"
-                >
-                  Dashboard
-                </Button>
-              </Link>
-              <Button
-                variant="outlined"
-                onClick={logout}
-                className="landing-hero-nav-links-item-login"
-              >
-                Logout
-              </Button>
-            </div>
-          ) : (
-            <Button
-              variant="contained"
-              onClick={() => setIsLoginModalOpen(true)}
-              className="landing-hero-nav-links-item-login"
-            >
-              Login
-            </Button>
+          {!loadingAuth && (
+            <>
+              {user ? (
+                <>
+                  <Link href="/dashboard">
+                    <Button
+                      variant="text"
+                      className="landing-hero-nav-links-item"
+                    >
+                      Dashboard
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="text"
+                    color="error"
+                    onClick={logout}
+                    className="landing-hero-nav-links-item-logout"
+                  >
+                    <PowerSettingsNewIcon /> Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  &nbsp;
+                  <Button
+                    variant="contained"
+                    onClick={() => setIsLoginModalOpen(true)}
+                    className="landing-hero-nav-links-item-login"
+                  >
+                    Sign In
+                  </Button>
+                </>
+              )}
+            </>
           )}
         </div>
       </div>
       <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
+        open={isLoginModalOpen}
+        handleClose={() => setIsLoginModalOpen(false)}
       />
     </>
   );

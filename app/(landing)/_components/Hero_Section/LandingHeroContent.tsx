@@ -26,7 +26,7 @@ const LandingHeroContent = () => {
             variant="contained"
             onClick={handleClick}
           >
-            Explore&nbsp; ⇾
+            Try it&nbsp; ⇾
           </Button>
           <Tooltip title="Coming Soon" arrow>
             <div>

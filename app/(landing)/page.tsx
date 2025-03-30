@@ -6,11 +6,13 @@ import LandingSteps from "./_components/Steps_Section/LandingSteps";
 import LandingFeatures from "./_components/Features_Section/LandingFeatures";
 import LandingContact from "./_components/Contact_Section/LandingContact";
 import { toast, ToastContainer } from "react-toastify";
+
 import React from "react";
 import LoadingScreen from "./_components/LoadingScreen";
 import { Feature, Step } from "./landingTypes";
 
 import { fal } from "@fal-ai/client";
+import { useAuth } from "@/lib/auth-context";
 
 fal.config({
   credentials: "YOUR_FAL_KEY",
@@ -21,6 +23,8 @@ export default function Home() {
   const [steps, setSteps] = React.useState<Step[]>([]);
   const [suggestion, setSuggestion] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const { user, loadingAuth } = useAuth();
+  console.log(user);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +55,7 @@ export default function Home() {
 
   return (
     <div className="landing">
-      {loading && <LoadingScreen />}
+      {loading && loadingAuth && <LoadingScreen />}
       <LandingHero />
       {!loading && (
         <>
