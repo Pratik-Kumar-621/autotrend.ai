@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import LandingExplore from "../(landing)/_components/Explore_Section/LandingExplore";
 import { toast } from "react-toastify";
-import { Button } from "@mui/material";
-import Image from "next/image";
+import UserNav from "../_components/UserNav";
+import "../_assets/styles/dashboard.scss";
 
 export default function Dashboard() {
-  const { loadingAuth, user, logout } = useAuth();
+  const { loadingAuth } = useAuth();
   const [posts, setPosts] = useState([]);
   const [suggestion, setSuggestion] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,31 +53,7 @@ export default function Dashboard() {
       {(loadingAuth || loading) && <LoadingScreen />}
 
       <div className="dashboard">
-        <div className="dashboard-nav">
-          <div className="landing-hero-nav-logo">
-            <Image
-              src="/images/Logo/Logo.png"
-              alt="Logo"
-              width={31}
-              height={20}
-            />
-            Autotrend.ai
-          </div>
-          <div className="dashboard-nav-content">
-            <div className="dashboard-nav-content-name">
-              Hi {user?.displayName}
-            </div>
-          </div>
-          <Button
-            className="dashboard-nav-content-logout"
-            variant="outlined"
-            color="error"
-            autoCapitalize="true"
-            onClick={logout}
-          >
-            Logout
-          </Button>
-        </div>
+        <UserNav />
         <div className="dashboard-content">
           <LandingExplore {...{ suggestion }} />
         </div>

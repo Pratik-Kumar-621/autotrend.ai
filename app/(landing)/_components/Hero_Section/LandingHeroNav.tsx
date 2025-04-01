@@ -2,11 +2,11 @@
 import React, { useEffect } from "react";
 import { NavLinks } from "../../_landing_data/navLinks";
 import Button from "@mui/material/Button";
-import Image from "next/image";
 import { useAuth } from "@/lib/auth-context";
 import Link from "next/link";
 import { LoginModal } from "../LoginModal";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import Logo from "@/components/logo";
 
 const LandingHeroNav = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = React.useState(false);
@@ -25,15 +25,7 @@ const LandingHeroNav = () => {
   return (
     <>
       <div className="landing-hero-nav">
-        <div className="landing-hero-nav-logo">
-          <Image
-            src="/images/Logo/Logo.png"
-            alt="Logo"
-            width={31}
-            height={20}
-          />
-          Autotrend.ai
-        </div>
+        <Logo />
         <div className="landing-hero-nav-links">
           {NavLinks.map((link) => (
             <Button
