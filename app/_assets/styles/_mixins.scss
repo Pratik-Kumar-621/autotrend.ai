@@ -1,3 +1,21 @@
+@mixin activeTextButton {
+  color: #d2d2d2 !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  text-transform: capitalize !important;
+  height: 40px !important;
+  border-radius: 7px !important;
+  padding: 0 20px !important;
+}
+@mixin disabledTextButton {
+  color: #68686b !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  text-transform: capitalize !important;
+  height: 40px !important;
+  border-radius: 7px !important;
+  padding: 0 20px !important;
+}
 @mixin activeContainedButton {
   background-color: #7b6dd3 !important;
   min-width: 140px !important;
