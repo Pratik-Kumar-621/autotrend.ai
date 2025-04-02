@@ -35,6 +35,7 @@ export const GET = async (request: Request) => {
     console.log(error);
 
     return new Response(JSON.stringify({ error: error.message }), {
+      status: error.message.split(" ")[0] === "Unauthorized:" ? 401 : 500,
       headers: { "Content-Type": "application/json" },
     });
   }
@@ -53,6 +54,7 @@ export const POST = async (request: Request) => {
     });
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
+      status: error.message.split(" ")[0] === "Unauthorized:" ? 401 : 500,
       headers: { "Content-Type": "application/json" },
     });
   }
@@ -74,6 +76,7 @@ export const PUT = async (request: Request) => {
     });
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
+      status: error.message.split(" ")[0] === "Unauthorized:" ? 401 : 500,
       headers: { "Content-Type": "application/json" },
     });
   }
@@ -91,6 +94,7 @@ export const DELETE = async (request: Request) => {
     });
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
+      status: error.message.split(" ")[0] === "Unauthorized:" ? 401 : 500,
       headers: { "Content-Type": "application/json" },
     });
   }

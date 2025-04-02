@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import SectionHeading from "../SectionHeading";
 import KeywordSelection from "./KeywordSelection";
@@ -14,7 +16,15 @@ const steps = [
   "Post on Socials",
 ];
 
-const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
+const LandingExplore = ({
+  suggestion,
+  handleAfterPost,
+  token,
+}: {
+  suggestion: string[];
+  handleAfterPost: () => void;
+  token: string;
+}) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -177,6 +187,39 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
       setBodyLoading(false);
     }
   };
+
+  const handlePostOnSocial = async () => {
+    setBodyLoading(true);
+    try {
+      const response = await fetch("/api/post/save", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          keyword: keyword,
+          image: selectedImage,
+          description: description,
+          postedAt: [],
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Error");
+      }
+      const data = await response.json();
+      if (!data.error) {
+        setCurrentStep(1);
+        setKeyword("");
+        setSelectedImage("");
+        setSelectedImage("");
+        handleAfterPost();
+      }
+    } catch (error) {
+      console.error("Error Posting content", error);
+    } finally {
+      setBodyLoading(false);
+    }
+  };
   return (
     <div className="landing-section landing-explore" id="landing-explore">
       <SectionHeading
@@ -237,6 +280,7 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
                 selectedImage,
                 description,
                 handlePostRegeneration,
+                handlePostOnSocial,
               }}
             />
           </div>

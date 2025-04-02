@@ -4,16 +4,17 @@ import { useAuth } from "@/lib/auth-context";
 import LoadingScreen from "../(landing)/_components/LoadingScreen";
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import LandingExplore from "../(landing)/_components/Explore_Section/LandingExplore";
 import { toast } from "react-toastify";
 import UserNav from "../_components/UserNav";
 import "../_assets/styles/dashboard.scss";
+import DashboardContent from "./_components/DashboardContent";
 
 export default function Dashboard() {
   const { loadingAuth } = useAuth();
   const [posts, setPosts] = useState([]);
   const [suggestion, setSuggestion] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isPosted, setIsPosted] = useState(new Date());
   console.log(posts);
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -46,7 +47,7 @@ export default function Dashboard() {
     };
 
     fetchData();
-  }, []);
+  }, [isPosted]);
 
   return (
     <>
@@ -54,8 +55,20 @@ export default function Dashboard() {
 
       <div className="dashboard">
         <UserNav />
+        <div
+          style={{
+            textAlign: "right",
+            color: "white",
+            fontSize: ".7rem",
+            padding: "10px",
+            marginBottom: "-20px",
+          }}
+        >
+          {" "}
+          <strong>Disclaimer: </strong> This page is currently on working phase
+        </div>
         <div className="dashboard-content">
-          <LandingExplore {...{ suggestion }} />
+          <DashboardContent {...{ posts, setIsPosted, suggestion }} />
         </div>
       </div>
     </>

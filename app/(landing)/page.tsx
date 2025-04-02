@@ -22,7 +22,7 @@ export default function Home() {
   const [steps, setSteps] = React.useState<Step[]>([]);
   const [suggestion, setSuggestion] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const { loadingAuth } = useAuth();
+  const { loadingAuth, token } = useAuth();
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -50,13 +50,18 @@ export default function Home() {
 
     fetchData();
   }, []);
+  const handleAfterPost = () => {
+    toast.success(
+      "Post has been saved successfully. Visit dashboard Page to view the post"
+    );
+  };
   return (
     <div className="landing">
       {(loading || loadingAuth) && <LoadingScreen />}
       <LandingHero />
       {!loading && (
         <>
-          <LandingExplore {...{ suggestion }} />
+          <LandingExplore {...{ suggestion, handleAfterPost, token }} />
           {features.length !== 0 && <LandingFeatures {...{ features }} />}
           {steps.length !== 0 && <LandingSteps {...{ steps }} />}
         </>

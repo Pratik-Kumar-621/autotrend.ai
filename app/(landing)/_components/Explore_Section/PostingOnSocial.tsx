@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CachedIcon from "@mui/icons-material/Cached";
+import { useAuth } from "@/lib/auth-context";
 interface SocialProps {
   handleBack: () => void;
   handlePostRegeneration: () => void;
+  handlePostOnSocial: () => void;
   loading: boolean;
   bodyLoading: boolean;
   selectedImage: any;
@@ -20,7 +22,9 @@ const PostingOnSocial = (props: SocialProps) => {
     selectedImage,
     description,
     handlePostRegeneration,
+    handlePostOnSocial,
   } = props;
+  const { user } = useAuth();
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(description);
@@ -93,17 +97,27 @@ const PostingOnSocial = (props: SocialProps) => {
         >
           Back
         </Button>
-        <Tooltip title="Coming Soon" arrow>
-          <div>
-            <Button
-              variant="contained"
-              className="landing-explore-social-buttons-next"
-              disabled
-            >
-              Save this Post
-            </Button>
-          </div>
-        </Tooltip>
+        {user ? (
+          <Button
+            variant="contained"
+            className="landing-explore-social-buttons-next"
+            onClick={handlePostOnSocial}
+          >
+            Save this Post
+          </Button>
+        ) : (
+          <Tooltip title="Coming Soon" arrow>
+            <div>
+              <Button
+                variant="contained"
+                className="landing-explore-social-buttons-next"
+                disabled
+              >
+                Save this Post
+              </Button>
+            </div>
+          </Tooltip>
+        )}
       </div>
     </div>
   );
