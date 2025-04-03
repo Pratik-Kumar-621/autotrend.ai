@@ -106,7 +106,7 @@ const PostingOnSocial = (props: SocialProps) => {
             Save this Post
           </Button>
         ) : (
-          <Tooltip title="Coming Soon" arrow>
+          <Tooltip title="Login Required" arrow>
             <div>
               <Button
                 variant="contained"

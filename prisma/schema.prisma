@@ -27,5 +27,6 @@ model Posts {
     image       String?
     description String
     keyword     String
+    userId      String
     postedAt    String[]
 }
