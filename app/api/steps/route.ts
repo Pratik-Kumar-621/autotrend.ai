@@ -13,7 +13,7 @@ export const GET = async () => {
     });
   } catch (error: any) {
     return new Response(
-      JSON.stringify({ ype: "Error", message: error.message }),
+      JSON.stringify({ type: "Error", message: error.message }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -34,7 +34,7 @@ export const POST = async (request: Request) => {
     });
   } catch (error: any) {
     return new Response(
-      JSON.stringify({ ype: "Error", message: error.message }),
+      JSON.stringify({ type: "Error", message: error.message }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -61,7 +61,7 @@ export const PUT = async (request: Request) => {
     );
   } catch (error: any) {
     return new Response(
-      JSON.stringify({ ype: "Error", message: error.message }),
+      JSON.stringify({ type: "Error", message: error.message }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -79,10 +79,9 @@ export const DELETE = async (request: Request) => {
     return new Response(
       JSON.stringify({
         type: "Success",
-        data: `Step with id ${id} deleted Successfully`,
       }),
       {
-        status: 204,
+        status: 200,
       }
     );
   } catch (error: any) {

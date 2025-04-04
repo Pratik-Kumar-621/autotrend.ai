@@ -5,148 +5,157 @@ import Features from "./_admindetailComponents/Features";
 import Steps from "./_admindetailComponents/Steps";
 import { AdminDetailsProps, FeatureInput, Feature, Step } from "../adminTypes";
 import { Button } from "@mui/material";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
   const [features, setFeatures] = useState<Feature[]>([]);
   const [steps, setSteps] = useState<Step[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingFeature, setLoadingFeature] = useState(true);
+  const [loadingSteps, setLoadingSteps] = useState(true);
   const [loadingForm, setLoadingForm] = useState(false);
 
   useEffect(() => {
-    fetchData();
+    fetchFeaturesData();
+    fetchStepsData();
   }, []);
 
-  const fetchData = async () => {
+  const fetchFeaturesData = async () => {
+    setLoadingFeature(true);
     try {
-      const [featuresRes, stepsRes] = await Promise.all([
-        fetch("/api/features"),
-        fetch("/api/steps"),
-      ]);
-
-      const featuresData: Feature[] = await featuresRes.json();
-      const stepsData: Step[] = await stepsRes.json();
-
-      setFeatures(featuresData);
-      setSteps(stepsData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+      const featuresResponse = await axios.get("/api/features");
+      if (featuresResponse.data.type === "Error") {
+        throw new Error(featuresResponse.data.message);
+      }
+      setFeatures(featuresResponse.data.data);
+    } catch (error: any) {
+      toast.error(`Failed to fetch features data.`);
+      return error;
     } finally {
-      setLoading(false);
+      setLoadingFeature(false);
+    }
+  };
+  const fetchStepsData = async () => {
+    try {
+      const stepsResponse = await axios.get("/api/steps");
+      if (stepsResponse.data.type === "Error") {
+        throw new Error(stepsResponse.data.message);
+      }
+      setSteps(stepsResponse.data.data);
+    } catch (error: any) {
+      toast.error(`Failed to fetch steps data.`);
+      return error;
+    } finally {
+      setLoadingSteps(false);
     }
   };
 
-  // Feature handlers
   const handleAddFeature = async (feature: FeatureInput) => {
     setLoadingForm(true);
     try {
-      // Extract base64 data from the data URL
-      console.log("Adding feature", feature);
-
       const processedFeature = {
         ...feature,
         image: feature.image?.split?.(",")[1] || null,
       };
 
-      const response = await fetch("/api/features", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(processedFeature),
-      });
+      const response = await axios.post("/api/features", processedFeature);
+      const responseData = await response.data;
 
-      if (response.ok) {
-        setLoadingForm(false);
-        await fetchData();
+      if (responseData.type === "Success") {
+        await fetchFeaturesData();
       } else {
-        setLoadingForm(false);
-        console.error("Failed to add feature:", await response.text());
+        throw new Error();
       }
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(`Failed to add new feature`);
+      return error.message;
+    } finally {
       setLoadingForm(false);
-      console.error("Error adding feature:", error);
     }
   };
-  console.log(features);
-
   const handleEditFeature = async (id: string, feature: FeatureInput) => {
     setLoadingForm(true);
     try {
-      console.log("Editing feature", id, feature);
-
       const processedFeature = {
         ...feature,
         image: feature.image?.startsWith("data:")
           ? feature.image.split(",")[1]
           : feature.image,
       };
-      const response = await fetch(`/api/features`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, ...processedFeature }),
+      const response = await axios.put("/api/features", {
+        id,
+        ...processedFeature,
       });
-      if (response.ok) {
-        setLoadingForm(false);
-        await fetchData();
-      } else {
-        setLoadingForm(false);
-        console.error("Failed to edit feature:", await response.text());
-      }
-    } catch (error) {
+      if (response.data.type === "Success") {
+        await fetchFeaturesData();
+      } else throw new Error(response.data.message);
+    } catch (error: any) {
+      toast.error("Error editing feature");
+      return error.message;
+    } finally {
       setLoadingForm(false);
-      console.error("Error editing feature:", error);
     }
   };
 
   const handleDeleteFeature = async (id: string) => {
-    const response = await fetch(`/api/features`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
-
-    if (response.ok) {
-      await fetchData();
+    setLoadingForm(true);
+    try {
+      const response = await axios.delete("/api/features", {
+        data: { id: id },
+      });
+      if (response.data.type === "Success") {
+        await fetchFeaturesData();
+      } else throw new Error(response.data.message);
+    } catch (error: any) {
+      toast.error("Error deleting feature");
+      return error.message;
+    } finally {
+      setLoadingForm(false);
     }
   };
 
   // Step handlers
   const handleAddStep = async (step: Omit<Step, "id">) => {
     setLoadingForm(true);
-    const response = await fetch("/api/steps", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(step),
-    });
-
-    if (response.ok) {
+    try {
+      const response = await axios.post("/api/steps", step);
+      if (response.data.type === "Success") {
+        await fetchStepsData();
+      } else throw new Error();
+    } catch (error: any) {
+      toast.error("Error adding step");
+      return error.message;
+    } finally {
       setLoadingForm(false);
-      await fetchData();
     }
   };
 
   const handleEditStep = async (id: string, step: Omit<Step, "id">) => {
     setLoadingForm(true);
-
-    const response = await fetch(`/api/steps`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, ...step }),
-    });
-
-    if (response.ok) {
+    try {
+      const response = await axios.put("/api/steps", { id, ...step });
+      if (response.data.type === "Success") {
+        await fetchStepsData();
+      } else throw new Error();
+    } catch (error: any) {
+      toast.error("Error updating step");
+      return error.message;
+    } finally {
       setLoadingForm(false);
-      await fetchData();
     }
   };
 
   const handleDeleteStep = async (id: string) => {
-    const response = await fetch(`/api/steps`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
-
-    if (response.ok) {
-      await fetchData();
+    try {
+      const response = await axios.delete("/api/steps", { data: { id } });
+      if (response.data.type === "Success") {
+        await fetchStepsData();
+      } else throw new Error();
+    } catch (error: any) {
+      toast.error("Error deleting step");
+      return error.message;
+    } finally {
+      setLoadingForm(false);
     }
   };
 
@@ -166,7 +175,7 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
 
       <Features
         features={features}
-        loading={loading}
+        loading={loadingFeature}
         onAdd={handleAddFeature}
         onEdit={handleEditFeature}
         onDelete={handleDeleteFeature}
@@ -175,7 +184,7 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
 
       <Steps
         steps={steps}
-        loading={loading}
+        loading={loadingSteps}
         onAdd={handleAddStep}
         onEdit={handleEditStep}
         onDelete={handleDeleteStep}

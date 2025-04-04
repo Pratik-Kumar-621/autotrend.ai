@@ -3,7 +3,7 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import { authorize } from "@/lib/firebase-admin";
-import { errorStatus } from "../../apiReturns";
+import { errorStatus } from "../apiReturns";
 
 export const GET = async (request: Request) => {
   try {

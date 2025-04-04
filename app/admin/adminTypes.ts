@@ -28,8 +28,8 @@ export interface FeaturesProps {
   loading: boolean;
   loadingForm: boolean;
   onAdd: (feature: FeatureInput) => Promise<void>;
-  onEdit: (id: string, feature: FeatureInput) => Promise<void>;
-  onDelete: (id: string) => Promise<void>;
+  onEdit: (id: string, feature: FeatureInput) => Promise<void> | string;
+  onDelete: (id: string) => Promise<void> | string;
 }
 
 export interface FeatureForm {

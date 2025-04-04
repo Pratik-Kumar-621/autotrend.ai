@@ -35,7 +35,7 @@ const Features: React.FC<FeaturesProps> = ({
       }
       setIsModalOpen(false);
       setEditingFeature(null);
-      setForm({ title: "", description: "", image: null });
+      setForm({ sequence: 0, title: "", description: "", image: null });
     } catch (error) {
       console.error("Error submitting feature:", error);
     }
@@ -44,6 +44,7 @@ const Features: React.FC<FeaturesProps> = ({
   const handleEdit = (feature: Feature) => {
     setEditingFeature(feature);
     setForm({
+      sequence: feature.sequence,
       title: feature.title,
       description: feature.description,
       image: feature.image ? `data:image/jpeg;base64,${feature.image}` : null,
@@ -126,7 +127,7 @@ const Features: React.FC<FeaturesProps> = ({
   ];
 
   return (
-    <div className="border border-[#555555] rounded-lg shadow p-6 mb-10">
+    <div className="border border-[#555555] rounded-lg shadow p-6 mb-10 bg-black ">
       <div className="flex justify-between items-center mb-7">
         <h2 className="text-xl font-semibold">Features</h2>
         <Button

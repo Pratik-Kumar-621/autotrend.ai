@@ -6,13 +6,13 @@ const prisma = new PrismaClient();
 export const GET = async () => {
   try {
     const features = await prisma.feature.findMany();
-    return new Response(JSON.stringify({ status: "Success", data: features }), {
+    return new Response(JSON.stringify({ type: "Success", data: features }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (error: any) {
     return new Response(
-      JSON.stringify({ status: "Error", error: error.message }),
+      JSON.stringify({ type: "Error", error: error.message }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -29,7 +29,7 @@ export const POST = async (request: Request) => {
     });
     return new Response(
       JSON.stringify({
-        status: "Success",
+        type: "Success",
         data: newFeature,
       }),
       {
@@ -39,7 +39,7 @@ export const POST = async (request: Request) => {
     );
   } catch (error: any) {
     return new Response(
-      JSON.stringify({ status: "Error", error: error.message }),
+      JSON.stringify({ type: "Error", error: error.message }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -58,7 +58,7 @@ export const PUT = async (request: Request) => {
     });
     return new Response(
       JSON.stringify({
-        status: "Success",
+        type: "Success",
         data: updatedFeature,
       }),
       {
@@ -68,7 +68,7 @@ export const PUT = async (request: Request) => {
     );
   } catch (error: any) {
     return new Response(
-      JSON.stringify({ status: "Error", error: error.message }),
+      JSON.stringify({ type: "Error", error: error.message }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -86,15 +86,14 @@ export const DELETE = async (request: Request) => {
     return new Response(
       JSON.stringify({
         type: "Success",
-        data: `Feature with id ${id} deleted successfully`,
       }),
       {
-        status: 204,
+        status: 200,
       }
     );
   } catch (error: any) {
     return new Response(
-      JSON.stringify({ status: "Error", error: error.message }),
+      JSON.stringify({ type: "Error", error: error.message }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
