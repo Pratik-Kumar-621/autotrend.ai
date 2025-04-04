@@ -6,15 +6,18 @@ const prisma = new PrismaClient();
 export const GET = async () => {
   try {
     const features = await prisma.feature.findMany();
-    return new Response(JSON.stringify(features), {
+    return new Response(JSON.stringify({ status: "Success", data: features }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+  } catch (error: any) {
+    return new Response(
+      JSON.stringify({ status: "Error", error: error.message }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 };
 
@@ -24,15 +27,24 @@ export const POST = async (request: Request) => {
     const newFeature = await prisma.feature.create({
       data: data,
     });
-    return new Response(JSON.stringify(newFeature), {
-      status: 201,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({
+        status: "Success",
+        data: newFeature,
+      }),
+      {
+        status: 201,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (error: any) {
+    return new Response(
+      JSON.stringify({ status: "Error", error: error.message }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 };
 
@@ -44,15 +56,24 @@ export const PUT = async (request: Request) => {
       where: { id: id },
       data: { title, description, image, sequence },
     });
-    return new Response(JSON.stringify(updatedFeature), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({
+        status: "Success",
+        data: updatedFeature,
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (error: any) {
+    return new Response(
+      JSON.stringify({ status: "Error", error: error.message }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 };
 
@@ -62,13 +83,22 @@ export const DELETE = async (request: Request) => {
     await prisma.feature.delete({
       where: { id: id },
     });
-    return new Response(null, {
-      status: 204,
-    });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({
+        type: "Success",
+        data: `Feature with id ${id} deleted successfully`,
+      }),
+      {
+        status: 204,
+      }
+    );
+  } catch (error: any) {
+    return new Response(
+      JSON.stringify({ status: "Error", error: error.message }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 };

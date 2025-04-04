@@ -49,7 +49,7 @@ export const POST = async (request: Request) => {
     return new Response(
       JSON.stringify({
         type: "Success",
-        savedPost: saveNewPost,
+        data: saveNewPost,
       })
     );
   } catch (error: any) {
@@ -108,7 +108,7 @@ export const DELETE = async (request: Request) => {
     return new Response(
       JSON.stringify({
         type: "Success",
-        message: `Post with id ${id} deleted successfully`,
+        data: `Post with id ${id} deleted successfully`,
       })
     );
   } catch (error: any) {

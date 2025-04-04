@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const { keyword } = await req.json();
   try {
     const client = new OpenAI({
@@ -22,8 +21,14 @@ export async function POST(req: NextRequest) {
       },
       prompt: keyword,
     });
-    return NextResponse.json(result.data[0], { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return new Response(
+      JSON.stringify({ status: "Success", data: result.data[0] }),
+      { status: 200 }
+    );
+  } catch (error: any) {
+    return new Response(
+      JSON.stringify({ status: "Error", message: error.message }),
+      { status: 500 }
+    );
   }
 }
