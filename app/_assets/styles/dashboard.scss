@@ -1,1 +1,126 @@
 @import "./userNav";
+@import "./mixins";
+
+.dashboard {
+  &-content {
+    &-empty {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: auto;
+      color: white;
+      font-size: 21px;
+      font-weight: 600;
+      padding: 0 60px;
+      img {
+        width: 600px;
+      }
+      &-text {
+        margin: 20px 0;
+        text-align: center;
+      }
+      &-button {
+        @include activeTextButton;
+        color: #2e7d32 !important;
+      }
+    }
+    &-list {
+      padding: 40px 60px 60px;
+      &-heading {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 40px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        &-button {
+          @include activeOutlinedButton;
+          color: #2e7d32 !important;
+          border-color: rgb(6, 87, 16) !important;
+        }
+      }
+      &-items {
+        margin-top: 2rem;
+        color: white;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        justify-content: center;
+        grid-auto-flow: dense;
+        gap: 40px 30px;
+        text-align: center;
+        &-item {
+          width: 100%;
+          border-radius: 11px;
+          border: 2px double #7b3bb7;
+          //   border: 2px double #67676763;
+          padding: 10px;
+          position: relative;
+
+          &-keyword {
+            position: absolute;
+            color: black;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffffff;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 5px 10px;
+          }
+          img {
+            width: 100%;
+            border-radius: 7px;
+            margin-bottom: 10px;
+          }
+          &-actions {
+            position: absolute;
+            color: black;
+            bottom: -24px;
+            right: -2px;
+            background-color: #171717;
+            border-radius: 7px;
+            border: 1px solid #7b3bb7;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 0px 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.delete-dialog,
+.edit-dialog {
+  width: 450px;
+  color: white;
+  text-align: center;
+  padding: 25px 20px;
+  &-heading {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  &-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    &-cancel {
+      @include activeOutlinedButton;
+      width: 100px !important;
+    }
+    &-delete {
+      @include activeContainedButton;
+      min-width: 100px !important;
+      background-color: #d32f2f !important;
+    }
+    &-save {
+      @include activeContainedButton;
+      min-width: 100px !important;
+    }
+  }
+}

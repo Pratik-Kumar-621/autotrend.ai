@@ -29,4 +29,5 @@ model Posts {
     keyword     String
     userId      String
     postedAt    String[]
+    createdAt   DateTime @default(now())
 }

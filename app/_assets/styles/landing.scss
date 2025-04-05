@@ -134,7 +134,6 @@
     padding-top: 40px;
   }
   &-explore {
-    margin-bottom: 2rem;
     padding: 40px 60px;
     &-steps {
       margin: 2rem auto 0;
@@ -303,7 +302,7 @@
       max-width: 1050px;
       &-list {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
         gap: 30px;
         &-item {
           border: 1px solid rgb(123, 121, 121);
@@ -442,6 +441,7 @@
     }
   }
   &-feature {
+    margin-top: 2rem;
     margin-bottom: 50px;
     &-list {
       display: grid;
