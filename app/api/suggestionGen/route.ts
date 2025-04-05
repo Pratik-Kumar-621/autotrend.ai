@@ -11,12 +11,12 @@ export async function POST() {
     const text = result.response.text().replace("\n", "");
 
     return new Response(
-      JSON.stringify({ status: "Success", data: text.split("###") }),
+      JSON.stringify({ type: "Success", data: text.split("###") }),
       { status: 200 }
     );
   } catch (error: any) {
     return new Response(
-      JSON.stringify({ status: "Error", message: error.message }),
+      JSON.stringify({ type: "Error", message: error.message }),
       {
         status: 500,
       }

@@ -14,14 +14,14 @@ export async function POST(req: Request) {
 
     return new Response(
       JSON.stringify({
-        status: "Success",
+        type: "Success",
         data: text.replace(/###/g, "\n").replace("\n", ""),
       }),
       { status: 200 }
     );
   } catch (error: any) {
     return new Response(
-      JSON.stringify({ status: "Error", error: error.message }),
+      JSON.stringify({ type: "Error", error: error.message }),
       { status: 500 }
     );
   }

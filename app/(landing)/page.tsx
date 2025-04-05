@@ -35,7 +35,7 @@ export default function Home() {
   const getFeatures = async () => {
     try {
       const response = await axios.get("/api/features");
-      if (response.data.status === "Success") {
+      if (response.data.type === "Success") {
         setFeatures(response.data.data);
       } else {
         throw new Error();
@@ -50,7 +50,7 @@ export default function Home() {
   const getSteps = async () => {
     try {
       const response = await axios.get("/api/steps");
-      if (response.data.status === "Success") {
+      if (response.data.type === "Success") {
         setSteps(response.data.data);
       } else {
         throw new Error();
@@ -65,7 +65,7 @@ export default function Home() {
   const getSuggestions = async () => {
     try {
       const response = await axios.post("/api/suggestionGen");
-      if (response.data.status === "Success") {
+      if (response.data.type === "Success") {
         setSuggestion(response.data.data);
       } else {
         throw new Error();

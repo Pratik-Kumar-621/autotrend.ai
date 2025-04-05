@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
     return new Response(
       JSON.stringify({
-        status: "Success",
+        type: "Success",
         data: text.split("\n").filter((t) => t !== "###" && t !== ""),
       }),
       { status: 200 }
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   } catch (error: any) {
     return new Response(
       JSON.stringify({
-        status: "Success",
+        type: "Error",
         message: error.message,
       }),
       { status: 500 }

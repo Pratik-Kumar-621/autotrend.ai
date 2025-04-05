@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 
 export async function POST(req: Request) {
-  const { keyword } = await req.json();
+  const { selectedPrompt } = await req.json();
   try {
     const client = new OpenAI({
       baseURL: "https://api.studio.nebius.com/v1/",
@@ -19,15 +19,16 @@ export async function POST(req: Request) {
         negative_prompt: "",
         seed: -1,
       },
-      prompt: keyword,
+      prompt: selectedPrompt,
     });
     return new Response(
-      JSON.stringify({ status: "Success", data: result.data[0] }),
+      JSON.stringify({ type: "Success", data: result.data[0] }),
       { status: 200 }
     );
   } catch (error: any) {
+    console.error("Error generating image:", error);
     return new Response(
-      JSON.stringify({ status: "Error", message: error.message }),
+      JSON.stringify({ type: "Error", message: error.message }),
       { status: 500 }
     );
   }

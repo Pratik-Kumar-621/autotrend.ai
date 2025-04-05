@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CachedIcon from "@mui/icons-material/Cached";
@@ -24,6 +24,9 @@ const PostingOnSocial = (props: SocialProps) => {
     handlePostRegeneration,
     handlePostOnSocial,
   } = props;
+  useEffect(() => {
+    setEditedDescription(description);
+  }, [description]);
   const { user } = useAuth();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -39,7 +42,7 @@ const PostingOnSocial = (props: SocialProps) => {
     setEditedDescription(event.target.value);
   };
 
-  const handleDescriptionSave = (e) => {
+  const handleDescriptionSave = (e: any) => {
     e.preventDefault();
     setIsEditing(false);
     // Optionally, you can add a callback here to save the edited description
