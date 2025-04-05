@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/auth-context";
 import LoadingScreen from "../(landing)/_components/LoadingScreen";
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import UserNav from "../_components/UserNav";
 import "../_assets/styles/dashboard.scss";
 import DashboardContent from "./_components/DashboardContent";
@@ -55,31 +55,18 @@ export default function Dashboard() {
 
   return (
     <>
-      {loadingAuth || loading || !token ? (
+      {loadingAuth || !token ? (
         <LoadingScreen />
       ) : (
         <div className="dashboard">
           <UserNav />
-          <div
-            style={{
-              textAlign: "right",
-              color: "white",
-              fontSize: ".7rem",
-              padding: "10px",
-              marginBottom: "-20px",
-            }}
-          >
-            {" "}
-            <strong>Disclaimer: </strong> This page is currently on working
-            phase
-          </div>
-          <div className="dashboard-content">
-            <DashboardContent
-              {...{ posts, setIsPosted, suggestion, setPosts }}
-            />
-          </div>
+          <DashboardContent
+            {...{ posts, setIsPosted, suggestion, setPosts, setLoading }}
+          />
         </div>
       )}
+      {loading && <LoadingScreen />}
+      <ToastContainer />
     </>
   );
 }

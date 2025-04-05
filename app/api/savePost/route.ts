@@ -70,12 +70,12 @@ export const PUT = async (request: Request) => {
       throw new Error(user?.message);
     }
     const requestBody = await request.json();
-    const { id, updatedData } = requestBody;
+    const { id, description } = requestBody;
     const updatePost = await prisma.posts.update({
       where: {
         id: id,
-        data: updatedData,
       },
+      data: { description },
     });
     return new Response(
       JSON.stringify({
