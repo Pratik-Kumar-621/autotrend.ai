@@ -16,7 +16,7 @@ const LandingSteps = ({ steps }: StepProps) => {
           .map((step, index) => (
             <div key={index} className="mb-4">
               <div className="card bg-transparent p-4 rounded-lg shadow-md border border-[#6c6c6c] min-w-[200px] text-center">
-                {step.step.split(":")[1]}
+                {step.step}
               </div>
             </div>
           ))}

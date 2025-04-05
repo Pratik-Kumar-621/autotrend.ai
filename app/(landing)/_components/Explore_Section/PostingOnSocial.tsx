@@ -1,11 +1,13 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CachedIcon from "@mui/icons-material/Cached";
+import { useAuth } from "@/lib/auth-context";
 interface SocialProps {
   handleBack: () => void;
   handlePostRegeneration: () => void;
+  handlePostOnSocial: () => void;
   loading: boolean;
   bodyLoading: boolean;
   selectedImage: any;
@@ -20,7 +22,12 @@ const PostingOnSocial = (props: SocialProps) => {
     selectedImage,
     description,
     handlePostRegeneration,
+    handlePostOnSocial,
   } = props;
+  useEffect(() => {
+    setEditedDescription(description);
+  }, [description]);
+  const { user } = useAuth();
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(description);
@@ -35,7 +42,7 @@ const PostingOnSocial = (props: SocialProps) => {
     setEditedDescription(event.target.value);
   };
 
-  const handleDescriptionSave = (e) => {
+  const handleDescriptionSave = (e: any) => {
     e.preventDefault();
     setIsEditing(false);
     // Optionally, you can add a callback here to save the edited description
@@ -93,17 +100,27 @@ const PostingOnSocial = (props: SocialProps) => {
         >
           Back
         </Button>
-        <Tooltip title="Coming Soon" arrow>
-          <div>
-            <Button
-              variant="contained"
-              className="landing-explore-social-buttons-next"
-              disabled
-            >
-              Save this Post
-            </Button>
-          </div>
-        </Tooltip>
+        {user ? (
+          <Button
+            variant="contained"
+            className="landing-explore-social-buttons-next"
+            onClick={handlePostOnSocial}
+          >
+            Save this Post
+          </Button>
+        ) : (
+          <Tooltip title="Login Required" arrow>
+            <div>
+              <Button
+                variant="contained"
+                className="landing-explore-social-buttons-next"
+                disabled
+              >
+                Save this Post
+              </Button>
+            </div>
+          </Tooltip>
+        )}
       </div>
     </div>
   );

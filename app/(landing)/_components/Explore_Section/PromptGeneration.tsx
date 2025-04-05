@@ -1,5 +1,5 @@
 import { Button, IconButton, Tooltip } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import LoopIcon from "@mui/icons-material/Loop";
 interface PromptsType {
   loading: boolean;
@@ -23,17 +23,12 @@ const PromptGeneration = (props: PromptsType) => {
     bodyLoading,
     handlePromptRegeneration,
   } = props;
-  useEffect(() => {
-    if (!selectedPrompt) {
-      setSelectedPrompt(prompts[0]);
-    }
-  }, [prompts]);
 
   return (
     <div className="landing-explore-prompts">
       <div className="landing-explore-prompts-heading">
         Select any prompt to generate image{" "}
-        <Tooltip title="Regenerate Images">
+        <Tooltip title="Regenerate Prompts">
           <IconButton color="inherit" onClick={handlePromptRegeneration}>
             <LoopIcon />
           </IconButton>
@@ -75,7 +70,7 @@ const PromptGeneration = (props: PromptsType) => {
           variant="contained"
           onClick={handleImageGeneration}
           className="landing-explore-prompts-buttons-next"
-          disabled={!selectedPrompt || loading || bodyLoading}
+          disabled={!selectedPrompt || loading}
         >
           {loading ? "Generating..." : "Generate Images"}
         </Button>

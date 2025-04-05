@@ -16,4 +16,25 @@ const app =
   getApps().length === 0 ? initializeApp(firebaseAdminConfig) : getApps()[0];
 const auth = getAuth(app);
 
-export { auth };
+const authorize = async (request: Request) => {
+  const authHeader = request.headers.get("Authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer"))
+    throw new Error("Unauthorized: Missing or Invalid Auth Header");
+  const token = authHeader.split(" ")[1];
+  if (!token) throw new Error("Missing Token");
+  try {
+    const decodedToken = await auth.verifyIdToken(token);
+    if (!decodedToken) throw new Error("Unauthorized: Invalid Token");
+    return {
+      type: "Success",
+      userId: decodedToken.uid,
+    };
+  } catch (error: any) {
+    return {
+      type: "Error",
+      message: error.message,
+    };
+  }
+};
+
+export { auth, authorize };

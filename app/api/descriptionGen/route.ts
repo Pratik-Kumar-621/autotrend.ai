@@ -1,8 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-
 import { genAI } from "../genAI";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const { prompt } = await req.json();
 
   try {
@@ -14,8 +12,17 @@ export async function POST(req: NextRequest) {
     const result = await model.generateContent(description);
     const text = result.response.text();
 
-    return NextResponse.json(text, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return new Response(
+      JSON.stringify({
+        type: "Success",
+        data: text.replace(/###/g, "\n").replace("\n", ""),
+      }),
+      { status: 200 }
+    );
+  } catch (error: any) {
+    return new Response(
+      JSON.stringify({ type: "Error", error: error.message }),
+      { status: 500 }
+    );
   }
 }

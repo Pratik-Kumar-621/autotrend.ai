@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import SectionHeading from "../SectionHeading";
 import KeywordSelection from "./KeywordSelection";
@@ -6,6 +8,8 @@ import ImageGeneration from "./ImageGeneration";
 import PostingOnSocial from "./PostingOnSocial";
 import StepperComponent from "@/components/stepper";
 import LoadingScreen from "../LoadingScreen";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const steps = [
   "Search Keywords",
@@ -14,7 +18,15 @@ const steps = [
   "Post on Socials",
 ];
 
-const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
+const LandingExplore = ({
+  suggestion,
+  handleAfterPost,
+  token,
+}: {
+  suggestion: string[];
+  handleAfterPost: () => void;
+  token: string;
+}) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,7 +39,6 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
   );
   const [bodyLoading, setBodyLoading] = useState(false);
   const [description, setDescription] = useState(""); // Add state for description
-
   const handleNext = () => {
     setCurrentStep((prev) => prev + 1);
     const targetElement = document.querySelector("#landing-explore");
@@ -42,22 +53,24 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
       targetElement.scrollIntoView({ behavior: "smooth" });
     }
   };
+  console.log(token);
 
   const handlePromptGeneration = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/post/prompts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ keyword }),
+      const response = await axios.post("/api/promptGen", {
+        keyword,
       });
-      const data = await response.json();
-      setPrompts(data || []);
-      handleNext();
-    } catch (error) {
-      console.error("Error generating prompts:", error);
+      const data = await response.data;
+      if (data.type === "Error") throw new Error();
+      else {
+        setPrompts(data.data);
+        handleNext();
+        setSelectedPrompt(data.data[0]);
+      }
+    } catch (error: any) {
+      toast.error("Error generating prompts");
+      return error.message;
     } finally {
       setLoading(false);
     }
@@ -66,17 +79,18 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
   const handlePromptRegeneration = async () => {
     setBodyLoading(true);
     try {
-      const response = await fetch("/api/post/prompts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ keyword }),
+      const response = await axios.post("/api/promptGen", {
+        data: { keyword },
       });
-      const data = await response.json();
-      setPrompts(data || []);
-    } catch (error) {
-      console.error("Error regenerating prompts:", error);
+      const data = await response.data;
+      if (data.type === "Error") throw new Error();
+      else {
+        setPrompts(data.data);
+        setSelectedPrompt(data.data[0]);
+      }
+    } catch (error: any) {
+      toast.error("Error regenerating prompts");
+      return error.message;
     } finally {
       setBodyLoading(false);
     }
@@ -84,18 +98,21 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
 
   const generateImage = async () => {
     try {
-      const response = await fetch("/api/post/generateimage", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ keyword: selectedPrompt }),
+      const response = await axios.post("/api/imageGen", {
+        selectedPrompt,
       });
-      const data = await response.json();
-      return data;
-    } catch (error) {
+      const data = response.data;
+      if (data.type === "Error") throw new Error();
+      else {
+        return data.data;
+      }
+    } catch (error: any) {
       console.log(error);
-      return "Error generating image:";
+
+      toast.error("Error generating image", {
+        toastId: "image-gen-error",
+      });
+      return error.message;
     }
   };
 
@@ -108,7 +125,7 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
 
     setLoading(true);
     try {
-      const imagePromises = Array.from({ length: 5 }, () => generateImage());
+      const imagePromises = Array.from({ length: 3 }, () => generateImage());
       const generatedImages = await Promise.all(imagePromises);
       setImage(generatedImages);
       setCachedImages((prev) => ({
@@ -126,7 +143,7 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
   const handleImageRegeneration = async () => {
     setBodyLoading(true);
     try {
-      const imagePromises = Array.from({ length: 5 }, () => generateImage());
+      const imagePromises = Array.from({ length: 3 }, () => generateImage());
       const regeneratedImages = await Promise.all(imagePromises);
       setImage(regeneratedImages);
       setCachedImages((prev) => ({
@@ -143,18 +160,18 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
   const handlePostGeneration = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/post/description", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt: selectedPrompt }),
+      const response = await axios.post("/api/descriptionGen", {
+        prompt: selectedPrompt,
       });
-      const data = await response.json();
-      setDescription(data);
-      handleNext();
-    } catch (error) {
-      console.error("Error generating description:", error);
+      const data = await response.data;
+      if (data.type === "Error") throw new Error();
+      else {
+        setDescription(data.data);
+        handleNext();
+      }
+    } catch (error: any) {
+      toast.error("Error generating post");
+      return error.message;
     } finally {
       setLoading(false);
     }
@@ -162,17 +179,52 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
   const handlePostRegeneration = async () => {
     setBodyLoading(true);
     try {
-      const response = await fetch("/api/post/description", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt: selectedPrompt }),
+      const response = await axios.post("/api/descriptionGen", {
+        prompt: selectedPrompt,
       });
-      const data = await response.json();
-      setDescription(data);
-    } catch (error) {
-      console.error("Error generating description:", error);
+      const data = await response.data;
+      console.log(data);
+      if (data.type === "Error") throw new Error();
+      else setDescription(data.data);
+    } catch (error: any) {
+      toast.error("Error regenerating description");
+      return error.message;
+    } finally {
+      setBodyLoading(false);
+    }
+  };
+  console.log(description);
+
+  const handlePostOnSocial = async () => {
+    setBodyLoading(true);
+    try {
+      const response = await axios.post(
+        "/api/savePost",
+        {
+          keyword: keyword,
+          image: selectedImage,
+          description: description,
+          postedAt: [],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token?.replace("\n", "")}`,
+          },
+        }
+      );
+
+      const data = await response.data;
+      if (data.type === "Error") {
+        throw new Error();
+      }
+      setCurrentStep(1);
+      setKeyword("");
+      setSelectedImage("");
+      setSelectedImage("");
+      handleAfterPost();
+    } catch (error: any) {
+      toast.error("Error Posting content");
+      return error.message;
     } finally {
       setBodyLoading(false);
     }
@@ -237,6 +289,7 @@ const LandingExplore = ({ suggestion }: { suggestion: string[] }) => {
                 selectedImage,
                 description,
                 handlePostRegeneration,
+                handlePostOnSocial,
               }}
             />
           </div>

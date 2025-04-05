@@ -2,10 +2,12 @@
 import React, { useState, useEffect } from "react";
 import LoginForm from "./_components/LoginForm";
 import AdminDetails from "./_components/AdminDetails";
+import LoadingScreen from "../(landing)/_components/LoadingScreen";
 
 const AdminPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   // check if user is logged in or not
   useEffect(() => {
@@ -18,6 +20,7 @@ const AdminPage = () => {
         localStorage.removeItem("adminLogin");
       }
     }
+    setLoading(false);
   }, []);
 
   // login user and save the user instance in localstorage
@@ -39,11 +42,21 @@ const AdminPage = () => {
     setIsLoggedIn(false);
   };
 
-  if (isLoggedIn) {
-    return <AdminDetails onLogout={handleLogout} />;
-  }
-
-  return <LoginForm onLogin={handleLogin} error={error} />;
+  return (
+    <>
+      {loading ? (
+        <LoadingScreen />
+      ) : (
+        <div className="mx-10">
+          {isLoggedIn ? (
+            <AdminDetails onLogout={handleLogout} />
+          ) : (
+            <LoginForm onLogin={handleLogin} error={error} />
+          )}
+        </div>
+      )}
+    </>
+  );
 };
 
 export default AdminPage;

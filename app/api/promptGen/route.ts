@@ -1,8 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-
 import { genAI } from "../genAI";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const { keyword } = await req.json();
 
   try {
@@ -13,11 +11,20 @@ export async function POST(req: NextRequest) {
     const result = await model.generateContent(prompt);
     const text = result.response.text().replace("\n", "");
 
-    return NextResponse.json(
-      text.split("\n").filter((t) => t !== "###" && t !== ""),
+    return new Response(
+      JSON.stringify({
+        type: "Success",
+        data: text.split("\n").filter((t) => t !== "###" && t !== ""),
+      }),
       { status: 200 }
     );
-  } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: any) {
+    return new Response(
+      JSON.stringify({
+        type: "Error",
+        message: error.message,
+      }),
+      { status: 500 }
+    );
   }
 }

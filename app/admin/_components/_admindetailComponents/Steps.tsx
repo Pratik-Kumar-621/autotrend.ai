@@ -69,7 +69,7 @@ const Steps: React.FC<StepsProps> = ({
   ];
 
   return (
-    <div className="border border-[#555555] rounded-lg shadow p-6 mb-10">
+    <div className="border bg-black border-[#555555] rounded-lg shadow p-6 mb-10">
       <div className="flex justify-between items-center mb-7">
         <h2 className="text-xl font-semibold">Steps</h2>
         <Button
