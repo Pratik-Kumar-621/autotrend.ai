@@ -20,7 +20,6 @@ const DashboardContent = (props: any) => {
   const [postToDelete, setPostToDelete] = useState<string | null>(null);
   const [editOpen, setEditOpen] = useState(false);
   const [postToEdit, setPostToEdit] = useState<any>(null);
-  console.log(open);
   const { token } = useAuth();
 
   const handleAfterPost = async () => {
@@ -57,7 +56,6 @@ const DashboardContent = (props: any) => {
       setPostToDelete(null);
     }
   };
-  console.log(token);
 
   const handleEditPost = async (updatedDescription: string) => {
     if (!postToEdit) return;
@@ -145,44 +143,50 @@ const DashboardContent = (props: any) => {
             </Button>
           </div>
           <div className="dashboard-content-list-items">
-            {posts?.map((item: any) => {
-              return (
-                <div
-                  className="dashboard-content-list-items-item"
-                  key={item.id}
-                >
-                  <div className="dashboard-content-list-items-item-keyword">
-                    # {item.keyword}
-                  </div>
-                  <Image
-                    className="dashboard-content-list-items-item-image"
-                    src={item.image}
-                    alt={item.keyword}
-                    width={300}
-                    height={300}
-                  />
+            {posts
+              ?.sort((a: any, b: any) => {
+                const fir = new Date(a.createdAt);
+                const sec = new Date(b.createdAt);
+                return fir.getTime() - sec.getTime();
+              })
+              ?.map((item: any) => {
+                return (
+                  <div
+                    className="dashboard-content-list-items-item"
+                    key={item.id}
+                  >
+                    <div className="dashboard-content-list-items-item-keyword">
+                      # {item.keyword}
+                    </div>
+                    <Image
+                      className="dashboard-content-list-items-item-image"
+                      src={item.image}
+                      alt={item.keyword}
+                      width={300}
+                      height={300}
+                    />
 
-                  <div className="dashboard-content-list-items-item-description">
-                    <strong>Description: </strong>
-                    {item.description}
+                    <div className="dashboard-content-list-items-item-description">
+                      <strong>Description: </strong>
+                      {item.description}
+                    </div>
+                    <div className="dashboard-content-list-items-item-actions">
+                      <IconButton
+                        onClick={() => openEditDialog(item)}
+                        color="primary"
+                      >
+                        <EditIcon sx={{ fontSize: "18px" }} />
+                      </IconButton>{" "}
+                      <IconButton
+                        onClick={() => openConfirmDialog(item.id)}
+                        color="error"
+                      >
+                        <DeleteIcon sx={{ fontSize: "18px" }} />
+                      </IconButton>
+                    </div>
                   </div>
-                  <div className="dashboard-content-list-items-item-actions">
-                    <IconButton
-                      onClick={() => openEditDialog(item)}
-                      color="primary"
-                    >
-                      <EditIcon sx={{ fontSize: "18px" }} />
-                    </IconButton>{" "}
-                    <IconButton
-                      onClick={() => openConfirmDialog(item.id)}
-                      color="error"
-                    >
-                      <DeleteIcon sx={{ fontSize: "18px" }} />
-                    </IconButton>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       )}
