@@ -53,8 +53,6 @@ const LandingExplore = ({
       targetElement.scrollIntoView({ behavior: "smooth" });
     }
   };
-  console.log(token);
-
   const handlePromptGeneration = async () => {
     setLoading(true);
     try {
@@ -107,8 +105,6 @@ const LandingExplore = ({
         return data.data;
       }
     } catch (error: any) {
-      console.log(error);
-
       toast.error("Error generating image", {
         toastId: "image-gen-error",
       });
@@ -183,7 +179,6 @@ const LandingExplore = ({
         prompt: selectedPrompt,
       });
       const data = await response.data;
-      console.log(data);
       if (data.type === "Error") throw new Error();
       else setDescription(data.data);
     } catch (error: any) {
@@ -193,7 +188,6 @@ const LandingExplore = ({
       setBodyLoading(false);
     }
   };
-  console.log(description);
 
   const handlePostOnSocial = async () => {
     setBodyLoading(true);

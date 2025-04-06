@@ -13,7 +13,6 @@ const UserNav = () => {
   const { logout } = useAuth();
 
   const pathname = usePathname();
-  console.log(pathname);
 
   return (
     <div className="user-nav">

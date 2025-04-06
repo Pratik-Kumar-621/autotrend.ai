@@ -16,7 +16,6 @@ export default function Dashboard() {
   const [suggestion, setSuggestion] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [isPosted, setIsPosted] = useState(new Date());
-  console.log(posts);
   useEffect(() => {
     if (!loadingAuth) {
       if (!token) {
