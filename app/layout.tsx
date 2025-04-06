@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Autotrend.ai",
-  description: "Generate trending posts in one click",
+  description: "Generate trending posts in few clicks",
 };
 
 export default function RootLayout({

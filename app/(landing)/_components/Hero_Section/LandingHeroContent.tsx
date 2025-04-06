@@ -17,7 +17,7 @@ const LandingHeroContent = () => {
           Transform Your Social Media Management with AI
         </div>
         <div className="landing-hero-content-info-text">
-          Generate trending posts in one click and post directly to your social
+          Generate trending posts in few clicks and post directly to your social
           handles
         </div>
         <div className="landing-hero-content-info-buttons">
