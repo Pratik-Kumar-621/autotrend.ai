@@ -11,16 +11,27 @@ import DashboardContent from "./_components/DashboardContent";
 import axios from "axios";
 
 export default function Dashboard() {
-  const { loadingAuth, token } = useAuth();
+  const { loadingAuth, token, twitterAccessToken, twitterAccessSecret } =
+    useAuth();
   const [posts, setPosts] = useState([]);
   const [suggestion, setSuggestion] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [isPosted, setIsPosted] = useState(new Date());
+  const [twitterCredentials, setTwitterCredentials] = useState({
+    accessToken: "",
+    accessSecret: "",
+  });
+
   useEffect(() => {
     if (!loadingAuth) {
       if (!token) {
         redirect("/");
       }
+      setTwitterCredentials({
+        accessToken: twitterAccessToken,
+        accessSecret: twitterAccessSecret,
+      });
+
       const fetchData = async () => {
         try {
           const [suggestionResponse, postsResponse] = await Promise.all([
@@ -52,6 +63,35 @@ export default function Dashboard() {
     }
   }, [isPosted, loadingAuth]);
 
+  const handlePost = async (post: any) => {
+    setLoading(true);
+    try {
+      console.log(twitterCredentials);
+
+      const response = await axios.post("/api/twitterPost", {
+        accessToken: twitterCredentials.accessToken,
+        accessSecret: twitterCredentials.accessSecret,
+        tweet: post.description,
+        altText: post.keyword,
+        imageUrl: post.image,
+      });
+      const data = await response.data;
+      if (data.type === "Error") {
+        throw new Error(data.message);
+      } else {
+        toast.success("Content Posted Successfully");
+      }
+      return "Success ok";
+    } catch (error: any) {
+      toast.error(
+        "OOPS!!! Sorry, but we are using free tier and limit reached for today 😅"
+      );
+      return "Error " + error.message;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       {loadingAuth || !token ? (
@@ -60,7 +100,14 @@ export default function Dashboard() {
         <div className="dashboard">
           <UserNav />
           <DashboardContent
-            {...{ posts, setIsPosted, suggestion, setPosts, setLoading }}
+            {...{
+              posts,
+              setIsPosted,
+              suggestion,
+              setPosts,
+              setLoading,
+              handlePost,
+            }}
           />
         </div>
       )}

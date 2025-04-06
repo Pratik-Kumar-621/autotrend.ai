@@ -1,26 +1,36 @@
 "use client";
 import LandingExplore from "@/app/(landing)/_components/Explore_Section/LandingExplore";
 import { useAuth } from "@/lib/auth-context";
-import { Button, Dialog, IconButton } from "@mui/material";
+import { Button, Dialog, Tabs, Tab, IconButton } from "@mui/material";
 import Image from "next/image";
 import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import axios from "axios";
 import { toast } from "react-toastify";
+import TwitterSVG from "@/app/_components/TwitterSVG";
 
 const DashboardContent = (props: any) => {
-  const { suggestion, posts, setIsPosted, setLoading } = props;
+  const { suggestion, posts, setIsPosted, setLoading, handlePost } = props;
 
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [postToDelete, setPostToDelete] = useState<string | null>(null);
   const [editOpen, setEditOpen] = useState(false);
   const [postToEdit, setPostToEdit] = useState<any>(null);
-  const { token } = useAuth();
+  const [socialConfirmOpen, setSocialConfirmOpen] = useState(false);
+  const [postToShare, setPostToShare] = useState<any>(null);
+  const { token, user } = useAuth();
+
+  const [value, setValue] = React.useState("");
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
 
   const handleAfterPost = async () => {
     toast.success("Post saved successfully");
@@ -88,6 +98,39 @@ const DashboardContent = (props: any) => {
       setPostToEdit(null);
     }
   };
+  const handleEditPostUpload = async () => {
+    if (!postToShare) return;
+    try {
+      console.log();
+
+      setLoading(true);
+      const response = await axios.put(
+        "api/savePost",
+        {
+          id: postToShare.id,
+          postedAt: ["X"],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.data;
+      if (data.type === "Error") {
+        throw new Error("Error editing post");
+      }
+      toast.success("Post updated successfully");
+      setIsPosted(new Date());
+    } catch (error: any) {
+      toast.error("Error editing post");
+      setLoading(false);
+      return error.message;
+    } finally {
+      setEditOpen(false);
+      setPostToEdit(null);
+    }
+  };
 
   const openConfirmDialog = (postId: string) => {
     setPostToDelete(postId);
@@ -97,6 +140,25 @@ const DashboardContent = (props: any) => {
   const openEditDialog = (post: any) => {
     setPostToEdit(post);
     setEditOpen(true);
+  };
+
+  const openSocialConfirmDialog = (post: any) => {
+    setPostToShare(post);
+    setSocialConfirmOpen(true);
+  };
+
+  const handleSocialPost = async () => {
+    if (postToShare) {
+      const data = await handlePost(postToShare);
+
+      if (
+        data.split(" ")[0] === "Success" &&
+        !postToShare.postedAt.includes("X")
+      ) {
+        handleEditPostUpload();
+      }
+    }
+    setSocialConfirmOpen(false);
   };
 
   return (
@@ -130,9 +192,7 @@ const DashboardContent = (props: any) => {
       ) : (
         <div className="dashboard-content-list">
           <div className="dashboard-content-list-heading">
-            <div className="dashboard-content-list-heading-text">
-              Saved Posts
-            </div>
+            <div className="dashboard-content-list-heading-text">Posts</div>
             <Button
               variant="outlined"
               className="dashboard-content-list-heading-button"
@@ -142,51 +202,103 @@ const DashboardContent = (props: any) => {
               New Post
             </Button>
           </div>
-          <div className="dashboard-content-list-items">
-            {posts
-              ?.sort((a: any, b: any) => {
-                const fir = new Date(a.createdAt);
-                const sec = new Date(b.createdAt);
-                return fir.getTime() - sec.getTime();
-              })
-              ?.map((item: any) => {
-                return (
-                  <div
-                    className="dashboard-content-list-items-item"
-                    key={item.id}
-                  >
-                    <div className="dashboard-content-list-items-item-keyword">
-                      # {item.keyword}
-                    </div>
-                    <Image
-                      className="dashboard-content-list-items-item-image"
-                      src={item.image}
-                      alt={item.keyword}
-                      width={300}
-                      height={300}
-                    />
-
-                    <div className="dashboard-content-list-items-item-description">
-                      <strong>Description: </strong>
-                      {item.description}
-                    </div>
-                    <div className="dashboard-content-list-items-item-actions">
-                      <IconButton
-                        onClick={() => openEditDialog(item)}
-                        color="primary"
-                      >
-                        <EditIcon sx={{ fontSize: "18px" }} />
-                      </IconButton>{" "}
-                      <IconButton
-                        onClick={() => openConfirmDialog(item.id)}
-                        color="error"
-                      >
-                        <DeleteIcon sx={{ fontSize: "18px" }} />
-                      </IconButton>
-                    </div>
+          <div className="dashboard-content-list-tab">
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="wrapped label tabs example"
+            >
+              <Tab
+                value=""
+                label="Saved Posts"
+                className="dashboard-content-list-tab-item"
+              />
+              <Tab
+                className="dashboard-content-list-tab-item"
+                value="X"
+                label={
+                  <div className="flex gap-2 items-center ">
+                    Uploaded on <TwitterSVG />
                   </div>
-                );
-              })}
+                }
+              />
+            </Tabs>
+          </div>
+          <div className="dashboard-content-list-items">
+            {posts.filter((item: any) => {
+              if (value !== "") return item.postedAt.includes(value);
+              else return item;
+            }).length ? (
+              <>
+                {posts
+                  .filter((item: any) => {
+                    if (value !== "") return item.postedAt.includes(value);
+                    else return item;
+                  })
+                  .sort((a: any, b: any) => {
+                    const fir = new Date(a.createdAt);
+                    const sec = new Date(b.createdAt);
+                    return fir.getTime() - sec.getTime();
+                  })
+                  ?.map((item: any) => {
+                    return (
+                      <div
+                        className="dashboard-content-list-items-item"
+                        key={item.id}
+                      >
+                        {user?.providerData[0].providerId === "twitter.com" && (
+                          <div className="dashboard-content-list-items-item-social">
+                            <IconButton
+                              onClick={() => openSocialConfirmDialog(item)}
+                            >
+                              <TwitterSVG />
+                            </IconButton>
+                          </div>
+                        )}
+                        <div className="dashboard-content-list-items-item-keyword">
+                          # {item.keyword}
+                        </div>
+                        <Image
+                          className="dashboard-content-list-items-item-image"
+                          src={item.image}
+                          alt={item.keyword}
+                          width={300}
+                          height={300}
+                        />
+
+                        <div className="dashboard-content-list-items-item-description">
+                          <strong>Description: </strong>
+                          {item.description}
+                        </div>
+                        <div className="dashboard-content-list-items-item-actions">
+                          <IconButton
+                            onClick={() => openEditDialog(item)}
+                            color="primary"
+                          >
+                            <EditIcon sx={{ fontSize: "18px" }} />
+                          </IconButton>{" "}
+                          <IconButton
+                            onClick={() => openConfirmDialog(item.id)}
+                            color="error"
+                          >
+                            <DeleteIcon sx={{ fontSize: "18px" }} />
+                          </IconButton>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </>
+            ) : (
+              <div className="dashboard-content-list-items-nodata">
+                Looks like you haven{"'"}t uploaded any post yet. Use {'"'}X
+                {'"'} icon to upload the saved posts.
+                <br />
+                <br />
+                <Button variant="text" onClick={() => setValue("")}>
+                  <KeyboardBackspaceIcon /> &nbsp;Go Back
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -259,7 +371,7 @@ const DashboardContent = (props: any) => {
       >
         <div className="edit-dialog">
           <h3 className="edit-dialog-heading">Edit Description</h3>
-          <div className="edit-dialog-content">
+          <div className="edit-dialog-input">
             <textarea
               className="w-full p-3 mb-2 text-[15px] min-h-[90px] text-white bg-[#4f4e4e] border border-[#7d7d7d] rounded-md focus:outline-none focus:border-[#b3b3b3] focus:ring-0"
               placeholder="Enter new description..."
@@ -283,6 +395,62 @@ const DashboardContent = (props: any) => {
               onClick={() => handleEditPost(postToEdit?.description)}
             >
               Save
+            </Button>
+          </div>
+        </div>
+      </Dialog>
+      <Dialog
+        open={socialConfirmOpen}
+        onClose={() => setSocialConfirmOpen(false)}
+        fullWidth
+        PaperProps={{
+          style: {
+            backgroundColor: "#131313",
+            border: "2px solid #2b2b2b",
+            boxShadow: "none",
+            borderRadius: "11px",
+            maxWidth: "500px",
+          },
+        }}
+      >
+        <div className="social-dialog">
+          <div className="social-dialog-heading">
+            You’re about to share this post on <TwitterSVG />
+          </div>
+          <div className="social-dialog-content">
+            {postToShare && (
+              <>
+                <Image
+                  className="social-dialog-content-image"
+                  src={postToShare.image}
+                  alt={postToShare.keyword}
+                  width={300}
+                  height={300}
+                />
+                <div className="social-dialog-content-keyword">
+                  # {postToShare.keyword}
+                </div>
+                <div className="social-dialog-content-description">
+                  <strong>Description: </strong>
+                  {postToShare.description}
+                </div>
+              </>
+            )}
+          </div>
+          <div className="social-dialog-actions">
+            <Button
+              variant="outlined"
+              className="social-dialog-actions-cancel"
+              onClick={() => setSocialConfirmOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              className="social-dialog-actions-share"
+              onClick={handleSocialPost}
+            >
+              Share
             </Button>
           </div>
         </div>

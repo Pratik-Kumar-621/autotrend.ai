@@ -21,6 +21,8 @@ interface AuthContextType {
   signInWithTwitter: () => Promise<void>;
   logout: () => Promise<void>;
   token: string;
+  twitterAccessToken: string;
+  twitterAccessSecret: string;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -31,12 +33,16 @@ const AuthContext = createContext<AuthContextType>({
   signInWithTwitter: async () => {},
   logout: async () => {},
   token: "",
+  twitterAccessToken: "",
+  twitterAccessSecret: "",
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [token, setToken] = useState("");
+  const [twitterAccessToken, setTwitterAccessToken] = useState("");
+  const [twitterAccessSecret, setTwitterAccessSecret] = useState("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -48,11 +54,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const idToken = await user.getIdToken();
         setToken(idToken);
         // Save the token to localStorage
-        localStorage.setItem("authToken", idToken);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("authToken", idToken);
+
+          // Retrieve Twitter tokens from localStorage
+          const storedTwitterAccessToken =
+            localStorage.getItem("twitterAccessToken") || "";
+          const storedTwitterAccessSecret =
+            localStorage.getItem("twitterAccessSecret") || "";
+
+          setTwitterAccessToken(storedTwitterAccessToken);
+          setTwitterAccessSecret(storedTwitterAccessSecret);
+        }
       } else {
         // Clear the session when user logs out
         setToken("");
-        localStorage.removeItem("authToken");
+        setTwitterAccessToken("");
+        setTwitterAccessSecret("");
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("twitterAccessToken");
+          localStorage.removeItem("twitterAccessSecret");
+        }
       }
     });
 
@@ -82,7 +105,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signInWithTwitter = async () => {
     const provider = new TwitterAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+
+      const credential: any = TwitterAuthProvider.credentialFromResult(result);
+
+      if (credential) {
+        setTwitterAccessToken(credential.accessToken);
+
+        setTwitterAccessSecret(credential.secret ?? "");
+
+        if (typeof window !== "undefined") {
+          localStorage.setItem("twitterAccessToken", credential.accessToken);
+
+          localStorage.setItem("twitterAccessSecret", credential.secret ?? "");
+        }
+      }
     } catch (error) {
       console.error("Error signing in with Twitter:", error);
       throw error;
@@ -113,6 +150,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signInWithTwitter,
         logout,
         token,
+        twitterAccessToken,
+        twitterAccessSecret,
       }}
     >
       {children}
