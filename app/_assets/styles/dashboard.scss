@@ -216,3 +216,16 @@
     }
   }
 }
+
+@media all and (max-width: 900px) {
+  .dashboard {
+    &-content {
+      &-empty {
+        padding: 0 20px;
+      }
+      &-list {
+        padding: 40px 20px 60px;
+      }
+    }
+  }
+}

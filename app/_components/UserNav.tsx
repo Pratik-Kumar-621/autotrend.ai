@@ -63,7 +63,7 @@ const UserNav = () => {
           color="inherit"
           aria-label="menu"
           onClick={() => setDrawerOpen(true)}
-          sx={{ ml: "auto" }}
+          sx={{ ml: "auto", color: "white" }}
         >
           <MenuIcon />
         </IconButton>
