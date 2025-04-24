@@ -10,13 +10,8 @@ import React from "react";
 import LoadingScreen from "./_components/LoadingScreen";
 import { Feature, Step } from "./landingTypes";
 
-import { fal } from "@fal-ai/client";
 import { useAuth } from "@/lib/auth-context";
 import axios from "axios";
-
-fal.config({
-  credentials: "YOUR_FAL_KEY",
-});
 
 export default function Home() {
   const [features, setFeatures] = React.useState<Feature[]>([]);
