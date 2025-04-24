@@ -25,7 +25,7 @@
       align-items: center;
       max-width: 1250px;
       margin: 0 auto;
-      padding: 40px 0 0 0;
+      padding: 40px 30px 0;
       &-links {
         &-item {
           @include activeTextButton;
@@ -63,7 +63,7 @@
       gap: 40px;
       margin: 20px auto 50px;
       max-width: 1250px;
-
+      padding: 0 40px;
       &-info {
         width: 50%;
         display: flex;

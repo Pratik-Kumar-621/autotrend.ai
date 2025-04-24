@@ -1,6 +1,40 @@
-@media all and (max-width: 1200px) {
+@media all and (max-width: 900px) {
+  .landing-hero-content {
+    &-image {
+      display: none;
+    }
+    &-info {
+      width: 100%;
+      text-align: center;
+      align-items: center;
+    }
+  }
 }
-@media all and (max-width: 800px) {
-}
-@media all and (max-width: 550px) {
+
+@media all and (max-width: 650px) {
+  .landing-hero-content {
+    &-info {
+      &-title {
+        font-size: 32px;
+        margin-bottom: 0px;
+        line-height: 40px;
+      }
+      &-text {
+        font-size: 14px;
+        line-height: 22px;
+      }
+      &-buttons {
+        display: flex;
+        &-item {
+          &-primary {
+            margin-right: 00px !important;
+          }
+          &-primary,
+          &-secondary {
+            scale: 0.8;
+          }
+        }
+      }
+    }
+  }
 }
