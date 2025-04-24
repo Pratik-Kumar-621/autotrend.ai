@@ -4,6 +4,7 @@ import { Button, IconButton, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CachedIcon from "@mui/icons-material/Cached";
 import { useAuth } from "@/lib/auth-context";
+import { LoginModal } from "../LoginModal";
 interface SocialProps {
   handleBack: () => void;
   handlePostRegeneration: () => void;
@@ -31,6 +32,10 @@ const PostingOnSocial = (props: SocialProps) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(description);
+  const [open, setOpen] = useState(false);
+  const handleLoginClose = () => {
+    setOpen(false);
+  };
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -45,7 +50,6 @@ const PostingOnSocial = (props: SocialProps) => {
   const handleDescriptionSave = (e: any) => {
     e.preventDefault();
     setIsEditing(false);
-    // Optionally, you can add a callback here to save the edited description
   };
 
   return (
@@ -109,19 +113,18 @@ const PostingOnSocial = (props: SocialProps) => {
             Save this Post
           </Button>
         ) : (
-          <Tooltip title="Login Required" arrow>
-            <div>
-              <Button
-                variant="contained"
-                className="landing-explore-social-buttons-next"
-                disabled
-              >
-                Save this Post
-              </Button>
-            </div>
-          </Tooltip>
+          <div>
+            <Button
+              variant="contained"
+              className="landing-explore-social-buttons-next"
+              onClick={() => setOpen(true)}
+            >
+              Save this Post
+            </Button>
+          </div>
         )}
       </div>
+      <LoginModal open={open} handleClose={handleLoginClose} />
     </div>
   );
 };

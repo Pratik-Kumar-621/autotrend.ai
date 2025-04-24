@@ -131,7 +131,7 @@
     max-width: 1250px;
     margin: 0 auto;
     color: white;
-    padding-top: 40px;
+    padding: 30px 20px 0;
   }
   &-explore {
     padding: 40px 60px;
@@ -441,8 +441,8 @@
     }
   }
   &-feature {
-    margin-top: 2rem;
-    margin-bottom: 50px;
+    margin-top: -2rem;
+    margin-bottom: 30px;
     &-list {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
