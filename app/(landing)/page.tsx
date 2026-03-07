@@ -12,7 +12,11 @@ import { Feature, Step } from "./landingTypes";
 
 import { useAuth } from "@/lib/auth-context";
 import axios from "axios";
+import { fal } from "@fal-ai/client";
 
+fal.config({
+  credentials: process.env.FAL_API_KEY,
+});
 export default function Home() {
   const [features, setFeatures] = React.useState<Feature[]>([]);
   const [steps, setSteps] = React.useState<Step[]>([]);
@@ -59,9 +63,15 @@ export default function Home() {
   };
   const getSuggestions = async () => {
     try {
-      const response = await axios.post("/api/suggestionGen");
+      const response = await axios.get("/api/suggestions");
       if (response.data.type === "Success") {
-        setSuggestion(response.data.data);
+        const rawSuggestions = Array.isArray(response.data.data)
+          ? response.data.data
+          : [];
+        const suggestionTexts = rawSuggestions.map((item: any) =>
+          typeof item === "string" ? item : item?.text,
+        );
+        setSuggestion(suggestionTexts);
       } else {
         throw new Error();
       }
@@ -74,7 +84,7 @@ export default function Home() {
   };
   const handleAfterPost = () => {
     toast.success(
-      "Post has been saved successfully. Visit dashboard Page to view the post"
+      "Post has been saved successfully. Visit dashboard Page to view the post",
     );
   };
   return (

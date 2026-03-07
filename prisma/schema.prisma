@@ -31,3 +31,10 @@ model Posts {
     postedAt    String[]
     createdAt   DateTime @default(now())
 }
+
+model Suggestion {
+    id        String   @id @default(uuid()) @db.Uuid
+    text      String
+    sequence  Int
+    createdAt DateTime @default(now())
+}

@@ -3,7 +3,15 @@
 import React, { useEffect, useState } from "react";
 import Features from "./_admindetailComponents/Features";
 import Steps from "./_admindetailComponents/Steps";
-import { AdminDetailsProps, FeatureInput, Feature, Step } from "../adminTypes";
+import Suggestions from "./_admindetailComponents/Suggestions";
+import {
+  AdminDetailsProps,
+  FeatureInput,
+  Feature,
+  Step,
+  Suggestion,
+  SuggestionForm,
+} from "../adminTypes";
 import { Button } from "@mui/material";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -13,11 +21,14 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
   const [steps, setSteps] = useState<Step[]>([]);
   const [loadingFeature, setLoadingFeature] = useState(true);
   const [loadingSteps, setLoadingSteps] = useState(true);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(true);
   const [loadingForm, setLoadingForm] = useState(false);
 
   useEffect(() => {
     fetchFeaturesData();
     fetchStepsData();
+    fetchSuggestionsData();
   }, []);
 
   const fetchFeaturesData = async () => {
@@ -47,6 +58,22 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
       return error;
     } finally {
       setLoadingSteps(false);
+    }
+  };
+
+  const fetchSuggestionsData = async () => {
+    setLoadingSuggestions(true);
+    try {
+      const suggestionsResponse = await axios.get("/api/suggestions");
+      if (suggestionsResponse.data.type === "Error") {
+        throw new Error(suggestionsResponse.data.error);
+      }
+      setSuggestions(suggestionsResponse.data.data);
+    } catch (error: any) {
+      toast.error(`Failed to fetch suggestions data.`);
+      return error;
+    } finally {
+      setLoadingSuggestions(false);
     }
   };
 
@@ -159,6 +186,54 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
     }
   };
 
+  const handleAddSuggestion = async (suggestion: SuggestionForm) => {
+    setLoadingForm(true);
+    try {
+      const response = await axios.post("/api/suggestions", suggestion);
+      if (response.data.type === "Success") {
+        await fetchSuggestionsData();
+      } else throw new Error();
+    } catch (error: any) {
+      toast.error("Error adding suggestion");
+      return error.message;
+    } finally {
+      setLoadingForm(false);
+    }
+  };
+
+  const handleEditSuggestion = async (
+    id: string,
+    suggestion: SuggestionForm
+  ) => {
+    setLoadingForm(true);
+    try {
+      const response = await axios.put("/api/suggestions", { id, ...suggestion });
+      if (response.data.type === "Success") {
+        await fetchSuggestionsData();
+      } else throw new Error();
+    } catch (error: any) {
+      toast.error("Error updating suggestion");
+      return error.message;
+    } finally {
+      setLoadingForm(false);
+    }
+  };
+
+  const handleDeleteSuggestion = async (id: string) => {
+    setLoadingForm(true);
+    try {
+      const response = await axios.delete("/api/suggestions", { data: { id } });
+      if (response.data.type === "Success") {
+        await fetchSuggestionsData();
+      } else throw new Error();
+    } catch (error: any) {
+      toast.error("Error deleting suggestion");
+      return error.message;
+    } finally {
+      setLoadingForm(false);
+    }
+  };
+
   return (
     <div className="admin-content pt-6 mb-10">
       <div className="flex justify-between items-center mb-[50px]">
@@ -188,6 +263,15 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({ onLogout }) => {
         onAdd={handleAddStep}
         onEdit={handleEditStep}
         onDelete={handleDeleteStep}
+        loadingForm={loadingForm}
+      />
+
+      <Suggestions
+        suggestions={suggestions}
+        loading={loadingSuggestions}
+        onAdd={handleAddSuggestion}
+        onEdit={handleEditSuggestion}
+        onDelete={handleDeleteSuggestion}
         loadingForm={loadingForm}
       />
     </div>

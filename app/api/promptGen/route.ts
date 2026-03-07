@@ -4,7 +4,7 @@ export async function POST(req: Request) {
   const { keyword } = await req.json();
 
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     const prompt = `Generate 12 prompts for engaging social media post ideas based on trending keyword: "${keyword}". 
         Each prompt should contain atleast 15 words and atmost 18 words and seperated by ###. Also provide only prompts, no explanation or context needed. The prompts should be engaging and interesting to the audience. Also don't ask questions in the prompts.`;
 
@@ -14,9 +14,9 @@ export async function POST(req: Request) {
     return new Response(
       JSON.stringify({
         type: "Success",
-        data: text.split("\n").filter((t) => t !== "###" && t !== ""),
+        data: text.split("###"),
       }),
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: any) {
     return new Response(
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
         type: "Error",
         message: error.message,
       }),
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

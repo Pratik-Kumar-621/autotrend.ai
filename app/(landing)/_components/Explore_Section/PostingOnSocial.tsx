@@ -42,7 +42,7 @@ const PostingOnSocial = (props: SocialProps) => {
   };
 
   const handleDescriptionChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setEditedDescription(event.target.value);
   };

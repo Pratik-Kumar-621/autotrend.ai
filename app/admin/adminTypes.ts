@@ -71,6 +71,28 @@ export type Step = {
   step: string;
   sequence: number;
 };
+
+export type Suggestion = {
+  id: string;
+  text: string;
+  sequence: number;
+  createdAt: Date;
+};
+
+export interface SuggestionForm {
+  text: string;
+  sequence: number;
+}
+
+export interface SuggestionsProps {
+  suggestions: Suggestion[];
+  loading: boolean;
+  loadingForm: boolean;
+  onAdd: (suggestion: SuggestionForm) => Promise<void>;
+  onEdit: (id: string, suggestion: SuggestionForm) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
+}
+
 export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;

@@ -35,7 +35,7 @@ const LandingExplore = ({
   const [image, setImage] = useState<any>([]);
   const [selectedImage, setSelectedImage] = useState("");
   const [cachedImages, setCachedImages] = useState<{ [key: string]: any[] }>(
-    {}
+    {},
   );
   const [bodyLoading, setBodyLoading] = useState(false);
   const [description, setDescription] = useState(""); // Add state for description
@@ -67,7 +67,7 @@ const LandingExplore = ({
         setSelectedPrompt(data.data[0]);
       }
     } catch (error: any) {
-      toast.error("Error generating prompts");
+      toast.error("Error generating prompts: API Limit Exceeded");
       return error.message;
     } finally {
       setLoading(false);
@@ -100,12 +100,13 @@ const LandingExplore = ({
         selectedPrompt,
       });
       const data = response.data;
+      console.log(data);
       if (data.type === "Error") throw new Error();
       else {
         return data.data;
       }
     } catch (error: any) {
-      toast.error("Error generating image", {
+      toast.error("Error generating image: API Limit Exceeded", {
         toastId: "image-gen-error",
       });
       return error.message;
@@ -121,7 +122,7 @@ const LandingExplore = ({
 
     setLoading(true);
     try {
-      const imagePromises = Array.from({ length: 3 }, () => generateImage());
+      const imagePromises = Array.from({ length: 2 }, () => generateImage());
       const generatedImages = await Promise.all(imagePromises);
       setImage(generatedImages);
       setCachedImages((prev) => ({
@@ -139,7 +140,7 @@ const LandingExplore = ({
   const handleImageRegeneration = async () => {
     setBodyLoading(true);
     try {
-      const imagePromises = Array.from({ length: 3 }, () => generateImage());
+      const imagePromises = Array.from({ length: 2 }, () => generateImage());
       const regeneratedImages = await Promise.all(imagePromises);
       setImage(regeneratedImages);
       setCachedImages((prev) => ({
@@ -204,7 +205,7 @@ const LandingExplore = ({
           headers: {
             Authorization: `Bearer ${token?.replace("\n", "")}`,
           },
-        }
+        },
       );
 
       const data = await response.data;

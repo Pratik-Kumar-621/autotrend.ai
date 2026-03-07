@@ -35,7 +35,7 @@ export default function Dashboard() {
       const fetchData = async () => {
         try {
           const [suggestionResponse, postsResponse] = await Promise.all([
-            axios.post("/api/suggestionGen"),
+            axios.get("/api/suggestions"),
             axios.get("/api/savePost", {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -48,9 +48,17 @@ export default function Dashboard() {
           if (postsResponse.data.type === "Error") {
             throw new Error("Error fetching saved posts");
           }
-          const suggestionData = await suggestionResponse.data;
-          const postsData = await postsResponse.data;
-          setSuggestion(suggestionData.data);
+          const suggestionData = suggestionResponse.data;
+          const postsData = postsResponse.data;
+
+          const rawSuggestions = Array.isArray(suggestionData.data)
+            ? suggestionData.data
+            : [];
+          const suggestionTexts = rawSuggestions.map((item: any) =>
+            typeof item === "string" ? item : item?.text
+          );
+
+          setSuggestion(suggestionTexts);
           setPosts(postsData.data);
         } catch (error: any) {
           toast.error(`Failed to fetch data. Reason`);
