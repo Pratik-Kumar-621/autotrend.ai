@@ -1,5 +1,3 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-export const genAI = new GoogleGenerativeAI(
-  "AIzaSyDokZdgh-2NMXd93BjK5uEJq1OhbHAYkeI",
-);
+export const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
